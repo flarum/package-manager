@@ -30,9 +30,14 @@ class CheckForUpdatesController implements RequestHandlerInterface
         $this->bus = $bus;
     }
 
+    /**
+     * @throws \Flarum\User\Exception\PermissionDeniedException
+     */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $actor = RequestUtil::getActor($request);
+
+        $actor->assertAdmin();
 
         $lastUpdateCheck = $this->bus->dispatch(
             new CheckForUpdates($actor)

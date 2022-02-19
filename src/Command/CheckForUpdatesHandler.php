@@ -48,15 +48,10 @@ class CheckForUpdatesHandler
      *
      * The results from both commands are properly processed and merged to have new key values `latest-minor` and `latest-major`.
      *
-     * @throws \Flarum\User\Exception\PermissionDeniedException|ComposerCommandFailedException
-     * @todo integration test
+     * @throws ComposerCommandFailedException
      */
     public function handle(CheckForUpdates $command)
     {
-        $actor = $command->actor;
-
-        $actor->assertAdmin();
-
         $firstOutput = $this->runComposerCommand(false);
         $firstOutput = json_decode($firstOutput, true);
 
