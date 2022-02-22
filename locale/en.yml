@@ -43,12 +43,31 @@ flarum-package-manager:
         title: Manager
       queue:
         columns:
+          details: Details
+          finished_at: Finish Time
           operation: Operation
+          package: Package
           status: Status
           started_at: Start Time
-          finished_at: Finish Time
-          details: Details
         none: There are no tasks yet.
+        operations:
+          extension_install: Install extension
+          extension_remove: Remove extension
+          extension_update: Update extension
+          update_check: Check for updates
+          update_global: Update all software packages
+          update_major: Major update
+          update_minor: Minor update
+          why_not: Analyze why a package cannot be updated
+        output_modal:
+          command: Composer Command
+          output: Output
+        refresh: Refresh tasks list
+        statuses:
+          success: Success
+          failure: Failed
+          pending: Pending
+          running: Running
         title: Queue
 
     settings:

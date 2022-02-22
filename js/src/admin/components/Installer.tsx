@@ -1,16 +1,22 @@
 import type Mithril from 'mithril';
 import app from 'flarum/admin/app';
-import Component from 'flarum/common/Component';
+import Component, {ComponentAttrs} from 'flarum/common/Component';
 import Button from 'flarum/common/components/Button';
 import Stream from 'flarum/common/utils/Stream';
 import LoadingModal from 'flarum/admin/components/LoadingModal';
 import errorHandler from '../utils/errorHandler';
+import QueueState from "../states/QueueState";
+import handleAsyncProcessing from "../utils/handleAsyncProcessing";
 
-export default class Installer<Attrs> extends Component<Attrs> {
+interface InstallerAttrs extends ComponentAttrs {
+  queueState: QueueState;
+}
+
+export default class Installer extends Component<InstallerAttrs> {
   packageName!: Stream<string>;
   isLoading: boolean = false;
 
-  oninit(vnode: Mithril.Vnode<Attrs, this>): void {
+  oninit(vnode: Mithril.Vnode<InstallerAttrs, this>): void {
     super.oninit(vnode);
 
     this.packageName = Stream('');
@@ -53,6 +59,7 @@ export default class Installer<Attrs> extends Component<Attrs> {
           data: this.data(),
         },
         errorHandler,
+        config: (xhr) => handleAsyncProcessing(xhr, () => this.attrs.queueState.loadTasks()),
       })
       .then((response) => {
         const extensionId = response.id;

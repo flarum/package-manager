@@ -1,3 +1,5 @@
+import app from "flarum/admin/app";
+
 export default function handleAsyncProcessing(xhr: XMLHttpRequest, refresh: () => unknown): XMLHttpRequest {
   /**
    * The command is being processed asynchronously through the queue.
@@ -7,6 +9,7 @@ export default function handleAsyncProcessing(xhr: XMLHttpRequest, refresh: () =
     if (this.status === 202) {
       refresh();
       document.getElementById('PackageManager-queueSection')?.scrollIntoView({ block: 'nearest' });
+      app.modal.close();
     }
   };
 

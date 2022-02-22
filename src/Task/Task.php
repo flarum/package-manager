@@ -30,7 +30,7 @@ class Task extends AbstractModel
      */
     public const PENDING = 'pending';
     public const RUNNING = 'running';
-    public const FAILED = 'failed';
+    public const FAILURE = 'failure';
     public const SUCCESS = 'success';
 
     /**
@@ -50,6 +50,12 @@ class Task extends AbstractModel
     protected $table = 'package_manager_tasks';
 
     protected $fillable = ['command', 'output'];
+
+    public $timestamps = true;
+
+    protected $casts = [
+        self::CREATED_AT => 'datetime',
+    ];
 
     public static function build(string $operation, ?string $package): self
     {
@@ -75,7 +81,7 @@ class Task extends AbstractModel
 
     public function end(bool $success): bool
     {
-        $this->status = $success ? static::SUCCESS : static::FAILED;
+        $this->status = $success ? static::SUCCESS : static::FAILURE;
         $this->finished_at = Carbon::now();
 
         return $this->save();

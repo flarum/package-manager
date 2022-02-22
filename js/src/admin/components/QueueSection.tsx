@@ -1,25 +1,35 @@
 import app from 'flarum/admin/app';
 import Component, {ComponentAttrs} from 'flarum/common/Component';
-import Task from "../models/Task";
 import LoadingIndicator from "flarum/common/components/LoadingIndicator";
 import humanTime from "flarum/common/utils/humanTime";
 import type Mithril from "mithril";
+import Button from "flarum/common/components/Button";
+import QueueState from "../states/QueueState";
+import StatusLabel from "./StatusLabel";
+import TaskOutputModal from "./TaskOutputModal";
 
-export default class QueueSection extends Component {
-  protected tasks: Task[]|null = null;
+interface QueueSectionAttrs extends ComponentAttrs {
+  state: QueueState;
+}
 
-  oninit(vnode: Mithril.Vnode<ComponentAttrs, this>) {
+export default class QueueSection extends Component<QueueSectionAttrs> {
+  oninit(vnode: Mithril.Vnode<QueueSectionAttrs, this>) {
     super.oninit(vnode);
 
-    this.loadTasks();
+    this.attrs.state.loadTasks();
   }
 
   view() {
     return (
       <div id="PackageManager-queueSection" className="ExtensionPage-permissions PackageManager-queueSection">
-        <div className="ExtensionPage-permissions-header">
+        <div className="ExtensionPage-permissions-header PackageManager-queueSection-header">
           <div className="container">
             <h2 className="ExtensionTitle">{app.translator.trans('flarum-package-manager.admin.sections.queue.title')}</h2>
+            <Button
+              className="Button Button--icon"
+              icon='fas fa-sync-alt'
+              onclick={this.attrs.state.loadTasks.bind(this)}
+              aria-label={app.translator.trans('flarum-package-manager.admin.sections.queue.refresh')}/>
           </div>
         </div>
         <div className="container">
@@ -30,13 +40,13 @@ export default class QueueSection extends Component {
   }
 
   queueTable() {
-    if (!this.tasks) {
+    if (!this.attrs.state.tasks) {
       return (
         <LoadingIndicator />
       );
     }
 
-    if (this.tasks && !this.tasks.length) {
+    if (this.attrs.state.tasks && !this.attrs.state.tasks.length) {
       return (
         <h3 className="ExtensionPage-subHeader">{app.translator.trans('flarum-package-manager.admin.sections.queue.none')}</h3>
       );
@@ -47,6 +57,7 @@ export default class QueueSection extends Component {
         <thead>
           <tr>
             <th>{app.translator.trans('flarum-package-manager.admin.sections.queue.columns.operation')}</th>
+            <th>{app.translator.trans('flarum-package-manager.admin.sections.queue.columns.package')}</th>
             <th>{app.translator.trans('flarum-package-manager.admin.sections.queue.columns.status')}</th>
             <th>{app.translator.trans('flarum-package-manager.admin.sections.queue.columns.started_at')}</th>
             <th>{app.translator.trans('flarum-package-manager.admin.sections.queue.columns.finished_at')}</th>
@@ -54,26 +65,28 @@ export default class QueueSection extends Component {
           </tr>
         </thead>
         <tbody>
-          {this.tasks.map((task, index) => (
+          {this.attrs.state.tasks.map((task, index) => (
             <tr key={index}>
-              <td>{task.operation()}</td>
-              <td>{task.status()}</td>
+              <td>{app.translator.trans(`flarum-package-manager.admin.sections.queue.operations.${task.operation()}`)}</td>
+              <td>{task.package()}</td>
+              <td>
+                <StatusLabel
+                  type={task.status()}
+                  label={app.translator.trans(`flarum-package-manager.admin.sections.queue.statuses.${task.status()}`)} />
+              </td>
               <td>{humanTime(task.startedAt())}</td>
               <td>{humanTime(task.finishedAt())}</td>
-              <td></td>
+              <td className="Table-controls">
+                <Button
+                  className="Button Button--icon Table-controls-item"
+                  icon="fas fa-file-alt"
+                  aria-label={app.translator.trans('flarum-package-manager.admin.sections.queue.columns.details')}
+                  onclick={() => app.modal.show(TaskOutputModal, { task })}/>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
     );
-  }
-
-  loadTasks() {
-    app.store
-      .find<Task[]>('package-manager-tasks', {})
-      .then((data) => {
-        this.tasks = data;
-        m.redraw();
-      });
   }
 }
