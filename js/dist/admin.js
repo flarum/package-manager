@@ -398,7 +398,7 @@ var Installer = /*#__PURE__*/function (_Component) {
 
   _proto.view = function view() {
     return m("div", {
-      className: "Form-group"
+      className: "Form-group PackageManager-installer"
     }, m("label", {
       htmlFor: "install-extension"
     }, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.extensions.install')), m("p", {

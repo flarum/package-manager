@@ -18,7 +18,7 @@ export default class Installer<Attrs> extends Component<Attrs> {
 
   view(): Mithril.Children {
     return (
-      <div className="Form-group">
+      <div className="Form-group PackageManager-installer">
         <label htmlFor="install-extension">{app.translator.trans('flarum-package-manager.admin.extensions.install')}</label>
         <p className="helpText">
           {app.translator.trans('flarum-package-manager.admin.extensions.install_help', {
@@ -46,7 +46,7 @@ export default class Installer<Attrs> extends Component<Attrs> {
     app.modal.show(LoadingModal);
 
     app
-      .request({
+      .request<{ id: number }>({
         method: 'POST',
         url: `${app.forum.attribute('apiUrl')}/package-manager/extensions`,
         body: {
