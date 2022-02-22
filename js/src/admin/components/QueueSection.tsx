@@ -16,7 +16,7 @@ export default class QueueSection extends Component<QueueSectionAttrs> {
   oninit(vnode: Mithril.Vnode<QueueSectionAttrs, this>) {
     super.oninit(vnode);
 
-    this.attrs.state.loadTasks();
+    this.attrs.state.loadTasks().then(m.redraw);
   }
 
   view() {
@@ -28,7 +28,7 @@ export default class QueueSection extends Component<QueueSectionAttrs> {
             <Button
               className="Button Button--icon"
               icon='fas fa-sync-alt'
-              onclick={this.attrs.state.loadTasks.bind(this)}
+              onclick={() => this.attrs.state.loadTasks().then(m.redraw)}
               aria-label={app.translator.trans('flarum-package-manager.admin.sections.queue.refresh')}/>
           </div>
         </div>

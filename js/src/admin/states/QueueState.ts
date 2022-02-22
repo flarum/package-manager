@@ -7,11 +7,10 @@ export default class QueueState {
   loadTasks() {
     this.tasks = null;
 
-    app.store
+    return app.store
       .find<Task[]>('package-manager-tasks', {})
       .then((data) => {
         this.tasks = data;
-        m.redraw();
       });
   }
 }

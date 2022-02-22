@@ -2,7 +2,7 @@ import Model from 'flarum/common/Model';
 
 export default class Task extends Model {
   status() {
-    return Model.attribute<'pending'|'running'|'failed'|'success'>('status').call(this);
+    return Model.attribute<'pending'|'running'|'failure'|'success'>('status').call(this);
   }
 
   operation() {
