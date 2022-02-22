@@ -9,8 +9,8 @@
 
 namespace Flarum\PackageManager\Api\Controller;
 
-use Flarum\Bus\Dispatcher;
 use Flarum\Http\RequestUtil;
+use Flarum\PackageManager\Job\Dispatcher;
 use Laminas\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -35,10 +35,10 @@ class MajorUpdateController implements RequestHandlerInterface
         $actor = RequestUtil::getActor($request);
         $dryRun = (bool) (int) Arr::get($request->getParsedBody(), 'data.dryRun', 0);
 
-        $this->bus->dispatch(
+        $response = $this->bus->dispatch(
             new MajorUpdate($actor, $dryRun)
         );
 
-        return new EmptyResponse(200);
+        return new EmptyResponse($response->queueJobs ? 202 : 201);
     }
 }

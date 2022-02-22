@@ -29,7 +29,8 @@ return [
         ->post('/package-manager/why-not', 'package-manager.why-not', Api\Controller\WhyNotController::class)
         ->post('/package-manager/minor-update', 'package-manager.minor-update', Api\Controller\MinorUpdateController::class)
         ->post('/package-manager/major-update', 'package-manager.major-update', Api\Controller\MajorUpdateController::class)
-        ->post('/package-manager/global-update', 'package-manager.global-update', Api\Controller\GlobalUpdateController::class),
+        ->post('/package-manager/global-update', 'package-manager.global-update', Api\Controller\GlobalUpdateController::class)
+        ->get('/package-manager-tasks', 'package-manager.tasks.index', Api\Controller\ListTasksController::class),
 
     (new Extend\Frontend('admin'))
         ->css(__DIR__ . '/less/admin.less')
@@ -47,7 +48,8 @@ return [
 
     (new Extend\Settings())
         ->default(LastUpdateCheck::key(), json_encode(LastUpdateCheck::default()))
-        ->default(LastUpdateRun::key(), json_encode(LastUpdateRun::default())),
+        ->default(LastUpdateRun::key(), json_encode(LastUpdateRun::default()))
+        ->default('flarum-package-manager.queue_jobs', false),
 
     (new Extend\ServiceProvider)
         ->register(PackageManagerServiceProvider::class),

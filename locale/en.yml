@@ -38,6 +38,22 @@ flarum-package-manager:
     minor_update_confirmation:
       content: This will also update any other extensions/packages with availabe updates.
 
+    sections:
+      control:
+        title: Manager
+      queue:
+        columns:
+          operation: Operation
+          status: Status
+          started_at: Start Time
+          finished_at: Finish Time
+          details: Details
+        none: There are no tasks yet.
+        title: Queue
+
+    settings:
+      queue_jobs: Run operations in the background queue
+
     updater:
       check_for_updates: Check for updates
       flarum: Flarum Core

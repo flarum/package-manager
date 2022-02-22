@@ -1,43 +1,25 @@
 import { extend } from 'flarum/common/extend';
 import app from 'flarum/admin/app';
-import Alert from 'flarum/common/components/Alert';
 import ExtensionPage from 'flarum/admin/components/ExtensionPage';
 import Button from 'flarum/common/components/Button';
 import LoadingModal from 'flarum/admin/components/LoadingModal';
-import Installer from './components/Installer';
-import Updater from './components/Updater';
 import isExtensionEnabled from 'flarum/admin/utils/isExtensionEnabled';
+import SettingsPage from "./components/SettingsPage";
+
+import Task from './models/Task';
 
 app.initializers.add('flarum-package-manager', (app) => {
+  app.store.models['package-manager-tasks'] = Task;
+
   app.extensionData
     .for('flarum-package-manager')
-    .registerSetting(() => {
-      if (!app.data.isRequiredDirectoriesWritable) {
-        return (
-          <div className="Form-group">
-            <Alert type="warning" dismissible={false}>
-              {app.translator.trans('flarum-package-manager.admin.file_permissions')}
-            </Alert>
-          </div>
-        );
-      }
-
-      return null;
+    .registerSetting({
+      setting: 'flarum-package-manager.queue_jobs',
+      label: app.translator.trans('flarum-package-manager.admin.settings.queue_jobs'),
+      default: false,
+      type: 'boolean',
     })
-    .registerSetting(() => {
-      if (app.data.isRequiredDirectoriesWritable) {
-        return <Installer />;
-      }
-
-      return null;
-    })
-    .registerSetting(() => {
-      if (app.data.isRequiredDirectoriesWritable) {
-        return <Updater />;
-      }
-
-      return null;
-    });
+    .registerPage(SettingsPage);
 
   extend(ExtensionPage.prototype, 'topItems', function (items) {
     if (this.extension.id === 'flarum-package-manager' || isExtensionEnabled(this.extension.id)) {

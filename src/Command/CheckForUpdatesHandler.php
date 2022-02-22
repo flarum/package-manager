@@ -52,20 +52,20 @@ class CheckForUpdatesHandler
      */
     public function handle(CheckForUpdates $command)
     {
-        $firstOutput = $this->runComposerCommand(false);
+        $firstOutput = $this->runComposerCommand(false, $command);
         $firstOutput = json_decode($firstOutput, true);
 
         $majorUpdates = false;
 
         foreach ($firstOutput['installed'] as $package) {
-            if ($package['latest-status'] === 'update-possible') {
+            if (isset($package['latest-status']) && $package['latest-status'] === 'update-possible') {
                 $majorUpdates = true;
                 break;
             }
         }
 
         if ($majorUpdates) {
-            $secondOutput = $this->runComposerCommand(true);
+            $secondOutput = $this->runComposerCommand(true, $command);
             $secondOutput = json_decode($secondOutput, true);
         }
 
@@ -76,7 +76,7 @@ class CheckForUpdatesHandler
         foreach ($firstOutput['installed'] as &$mainPackageUpdate) {
             $mainPackageUpdate['latest-minor'] = $mainPackageUpdate['latest-major'] = null;
 
-            if ($mainPackageUpdate['latest-status'] === 'update-possible') {
+            if (isset($mainPackageUpdate['latest-status']) && $mainPackageUpdate['latest-status'] === 'update-possible') {
                 $mainPackageUpdate['latest-major'] = $mainPackageUpdate['latest'];
 
                 $minorPackageUpdate = array_filter($secondOutput['installed'], function ($package) use ($mainPackageUpdate) {
@@ -87,7 +87,7 @@ class CheckForUpdatesHandler
                     $mainPackageUpdate['latest-minor'] = $minorPackageUpdate['latest'];
                 }
             } else {
-                $mainPackageUpdate['latest-minor'] = $mainPackageUpdate['latest'];
+                $mainPackageUpdate['latest-minor'] = $mainPackageUpdate['latest'] ?? null;
             }
         }
 
@@ -99,7 +99,7 @@ class CheckForUpdatesHandler
     /**
      * @throws ComposerCommandFailedException
      */
-    protected function runComposerCommand(bool $minorOnly): string
+    protected function runComposerCommand(bool $minorOnly, CheckForUpdates $command): string
     {
         $input = [
             'command' => 'outdated',
@@ -111,7 +111,7 @@ class CheckForUpdatesHandler
             $input['--minor-only'] = true;
         }
 
-        $output = $this->composer->run(new ArrayInput($input));
+        $output = $this->composer->run(new ArrayInput($input), $command->task ?? null);
 
         if ($output->getExitCode() !== 0) {
             throw new ComposerCommandFailedException('', $output->getContents());

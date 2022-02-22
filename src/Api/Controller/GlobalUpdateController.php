@@ -9,8 +9,8 @@
 
 namespace Flarum\PackageManager\Api\Controller;
 
-use Flarum\Bus\Dispatcher;
 use Flarum\Http\RequestUtil;
+use Flarum\PackageManager\Job\Dispatcher;
 use Laminas\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -36,10 +36,10 @@ class GlobalUpdateController implements RequestHandlerInterface
     {
         $actor = RequestUtil::getActor($request);
 
-        $this->bus->dispatch(
+        $response = $this->bus->dispatch(
             new GlobalUpdate($actor)
         );
 
-        return new EmptyResponse(200);
+        return new EmptyResponse($response->queueJobs ? 202 : 201);
     }
 }

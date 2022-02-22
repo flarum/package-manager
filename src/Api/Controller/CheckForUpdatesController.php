@@ -10,8 +10,8 @@
 namespace Flarum\PackageManager\Api\Controller;
 
 use Flarum\Http\RequestUtil;
-use Illuminate\Contracts\Bus\Dispatcher;
-use Illuminate\Support\Arr;
+use Flarum\PackageManager\Job\Dispatcher;
+use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -39,10 +39,17 @@ class CheckForUpdatesController implements RequestHandlerInterface
 
         $actor->assertAdmin();
 
-        $lastUpdateCheck = $this->bus->dispatch(
+        /**
+         * @TODO somewhere, if we're queuing, check that a similar composer command isn't already running,
+         * to avoid duplicate jobs.
+         */
+
+        $response = $this->bus->dispatch(
             new CheckForUpdates($actor)
         );
 
-        return new JsonResponse($lastUpdateCheck);
+        return $response->queueJobs
+            ? new EmptyResponse(202)
+            : new JsonResponse($response->data);
     }
 }

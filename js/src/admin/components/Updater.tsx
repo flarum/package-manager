@@ -8,6 +8,8 @@ import errorHandler from '../utils/errorHandler';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 import MajorUpdater from './MajorUpdater';
 import ExtensionItem, { Extension } from './ExtensionItem';
+import extractText from "flarum/common/utils/extractText";
+import handleAsyncProcessing from "../utils/handleAsyncProcessing";
 
 export type UpdatedPackage = {
   name: string;
@@ -177,8 +179,11 @@ export default class Updater<Attrs> extends Component<Attrs> {
         method: 'POST',
         url: `${app.forum.attribute('apiUrl')}/package-manager/check-for-updates`,
         errorHandler,
+        config: (xhr) => handleAsyncProcessing(xhr, () => null),
       })
       .then((response) => {
+        // @TODO, I wish the response had more than just the payload, need status code here to determine
+        // if the server is handling this asynchronously.
         this.lastUpdateCheck = response as LastUpdateCheck;
       })
       .finally(() => {
@@ -188,7 +193,7 @@ export default class Updater<Attrs> extends Component<Attrs> {
   }
 
   updateCoreMinor() {
-    if (confirm(app.translator.trans('flarum-package-manager.admin.minor_update_confirmation.content'))) {
+    if (confirm(extractText(app.translator.trans('flarum-package-manager.admin.minor_update_confirmation.content')))) {
       app.modal.show(LoadingModal);
       this.isLoading = 'minor-update';
 

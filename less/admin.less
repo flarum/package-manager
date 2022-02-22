@@ -5,12 +5,18 @@
   gap: 4px;
 }
 
-.ComposerFailureModal-output {
-  white-space: break-spaces;
+.PackageManager-controlSection, .PackageManager-queueSection {
+  > .container {
+    padding-bottom: 0;
+  }
 }
 
-.flarum-package-manager-Page .ExtensionPage-settings .Form-group:last-child {
-  display: none;
+.PackageManager-queueSection .Table {
+  width: 100%;
+}
+
+.ComposerFailureModal-output {
+  white-space: break-spaces;
 }
 
 .PackageManager-lastUpdatedAt {
@@ -132,8 +138,7 @@
   &-failure {
     --border-radius: 0;
     grid-area: failure;
-    margin: calc(~"0px - var(--space)");
-    margin-top: var(--space);
+    margin: var(--space) calc(~"0px - var(--space)") calc(~"0px - var(--space)");
   }
 
   &-incompatibleExtensions {
