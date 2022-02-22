@@ -219,7 +219,7 @@ var ControlSection = /*#__PURE__*/function (_Component) {
       className: "ExtensionTitle"
     }, flarum_admin_app__WEBPACK_IMPORTED_MODULE_5___default.a.translator.trans('flarum-package-manager.admin.sections.control.title')))), m("div", {
       className: "container"
-    }, flarum_admin_app__WEBPACK_IMPORTED_MODULE_5___default.a.data.isRequiredDirectoriesWritable ? m('[', null, m(_Installer__WEBPACK_IMPORTED_MODULE_3__["default"], null), m(_Updater__WEBPACK_IMPORTED_MODULE_4__["default"], null)) : m("div", {
+    }, flarum_admin_app__WEBPACK_IMPORTED_MODULE_5___default.a.data['flarum-package-manager.writable_dirs'] ? m('[', null, m(_Installer__WEBPACK_IMPORTED_MODULE_3__["default"], null), m(_Updater__WEBPACK_IMPORTED_MODULE_4__["default"], null)) : m("div", {
       className: "Form-group"
     }, m(flarum_common_components_Alert__WEBPACK_IMPORTED_MODULE_2___default.a, {
       type: "warning",
@@ -1166,7 +1166,8 @@ flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.initializers.add('flarum
     setting: 'flarum-package-manager.queue_jobs',
     label: app.translator.trans('flarum-package-manager.admin.settings.queue_jobs'),
     "default": false,
-    type: 'boolean'
+    type: 'boolean',
+    disabled: app.data['flarum-package-manager.using_sync_queue']
   }).registerPage(_components_SettingsPage__WEBPACK_IMPORTED_MODULE_6__["default"]);
   Object(flarum_common_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_admin_components_ExtensionPage__WEBPACK_IMPORTED_MODULE_2___default.a.prototype, 'topItems', function (items) {
     var _this = this;

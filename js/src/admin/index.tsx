@@ -18,6 +18,7 @@ app.initializers.add('flarum-package-manager', (app) => {
       label: app.translator.trans('flarum-package-manager.admin.settings.queue_jobs'),
       default: false,
       type: 'boolean',
+      disabled: app.data['flarum-package-manager.using_sync_queue']
     })
     .registerPage(SettingsPage);
 

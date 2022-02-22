@@ -19,6 +19,8 @@ use Flarum\PackageManager\Exception\ComposerUpdateFailedException;
 use Flarum\PackageManager\Exception\MajorUpdateFailedException;
 use Flarum\PackageManager\Settings\LastUpdateCheck;
 use Flarum\PackageManager\Settings\LastUpdateRun;
+use Illuminate\Contracts\Queue\Queue;
+use Illuminate\Queue\SyncQueue;
 
 return [
     (new Extend\Routes('api'))
@@ -38,10 +40,12 @@ return [
         ->content(function (Document $document) {
             $paths = resolve(Paths::class);
 
-            $document->payload['isRequiredDirectoriesWritable'] = is_writable($paths->vendor)
+            $document->payload['flarum-package-manager.writable_dirs'] = is_writable($paths->vendor)
                 && is_writable($paths->storage.'/.composer')
                 && is_writable($paths->base.'/composer.json')
                 && is_writable($paths->base.'/composer.lock');
+
+            $document->payload['flarum-package-manager.using_sync_queue'] = resolve(Queue::class) instanceof SyncQueue;
         }),
 
     new Extend\Locales(__DIR__ . '/locale'),

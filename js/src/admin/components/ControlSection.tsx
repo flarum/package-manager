@@ -14,7 +14,7 @@ export default class ControlSection extends Component {
           </div>
         </div>
         <div className="container">
-          {app.data.isRequiredDirectoriesWritable ? (
+          {app.data['flarum-package-manager.writable_dirs'] ? (
             <>
               <Installer />
               <Updater />
