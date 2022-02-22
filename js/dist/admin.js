@@ -645,6 +645,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _StatusLabel__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./StatusLabel */ "./src/admin/components/StatusLabel.tsx");
 /* harmony import */ var _TaskOutputModal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./TaskOutputModal */ "./src/admin/components/TaskOutputModal.tsx");
+/* harmony import */ var flarum_common_helpers_icon__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! flarum/common/helpers/icon */ "flarum/common/helpers/icon");
+/* harmony import */ var flarum_common_helpers_icon__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(flarum_common_helpers_icon__WEBPACK_IMPORTED_MODULE_8__);
+
 
 
 
@@ -705,11 +708,25 @@ var QueueSection = /*#__PURE__*/function (_Component) {
     }
 
     return m("table", {
-      className: "Table"
+      className: "Table PackageManager-queueTable"
     }, m("thead", null, m("tr", null, m("th", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.columns.operation')), m("th", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.columns.package')), m("th", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.columns.status')), m("th", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.columns.started_at')), m("th", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.columns.finished_at')), m("th", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.columns.details')))), m("tbody", null, this.attrs.state.tasks.map(function (task, index) {
+      var _task$package;
+
+      var extension = flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.data.extensions[(_task$package = task["package"]()) == null ? void 0 : _task$package.replace(/flarum-ext-|flarum-|\//, '-')];
       return m("tr", {
         key: index
-      }, m("td", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans("flarum-package-manager.admin.sections.queue.operations." + task.operation())), m("td", null, task["package"]()), m("td", null, m(_StatusLabel__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      }, m("td", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans("flarum-package-manager.admin.sections.queue.operations." + task.operation())), m("td", null, extension ? m("div", {
+        className: "PackageManager-queueTable-package"
+      }, m("div", {
+        className: "PackageManager-queueTable-package-icon ExtensionIcon",
+        style: extension.icon
+      }, extension.icon ? flarum_common_helpers_icon__WEBPACK_IMPORTED_MODULE_8___default()(extension.icon.name) : ''), m("div", {
+        className: "PackageManager-queueTable-package-details"
+      }, m("span", {
+        className: "PackageManager-queueTable-package-title"
+      }, extension.extra["flarum-extension"].title), m("span", {
+        className: "PackageManager-queueTable-package-name"
+      }, task["package"]()))) : task["package"]()), m("td", null, m(_StatusLabel__WEBPACK_IMPORTED_MODULE_6__["default"], {
         type: task.status(),
         label: flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans("flarum-package-manager.admin.sections.queue.statuses." + task.status())
       })), m("td", null, flarum_common_utils_humanTime__WEBPACK_IMPORTED_MODULE_4___default()(task.startedAt())), m("td", null, flarum_common_utils_humanTime__WEBPACK_IMPORTED_MODULE_4___default()(task.finishedAt())), m("td", {

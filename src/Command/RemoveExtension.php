@@ -32,6 +32,7 @@ class RemoveExtension implements BusinessCommandInterface
     public function __construct(User $actor, string $extensionId)
     {
         $this->actor = $actor;
+        // @TODO the queue looks for a package property
         $this->extensionId = $extensionId;
     }
 

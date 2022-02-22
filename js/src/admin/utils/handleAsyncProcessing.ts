@@ -1,6 +1,6 @@
 import app from "flarum/admin/app";
 
-export default function handleAsyncProcessing(xhr: XMLHttpRequest, refresh: () => Promise): XMLHttpRequest {
+export default function handleAsyncProcessing(xhr: XMLHttpRequest, refresh: () => Promise<any>): XMLHttpRequest {
   /**
    * The command is being processed asynchronously through the queue.
    * We refresh the queue table and scroll to it.

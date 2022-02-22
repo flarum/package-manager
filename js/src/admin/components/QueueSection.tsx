@@ -7,6 +7,8 @@ import Button from "flarum/common/components/Button";
 import QueueState from "../states/QueueState";
 import StatusLabel from "./StatusLabel";
 import TaskOutputModal from "./TaskOutputModal";
+import {Extension} from "flarum/admin/AdminApplication";
+import icon from "flarum/common/helpers/icon";
 
 interface QueueSectionAttrs extends ComponentAttrs {
   state: QueueState;
@@ -53,7 +55,7 @@ export default class QueueSection extends Component<QueueSectionAttrs> {
     }
 
     return (
-      <table className="Table">
+      <table className="Table PackageManager-queueTable">
         <thead>
           <tr>
             <th>{app.translator.trans('flarum-package-manager.admin.sections.queue.columns.operation')}</th>
@@ -65,26 +67,42 @@ export default class QueueSection extends Component<QueueSectionAttrs> {
           </tr>
         </thead>
         <tbody>
-          {this.attrs.state.tasks.map((task, index) => (
-            <tr key={index}>
-              <td>{app.translator.trans(`flarum-package-manager.admin.sections.queue.operations.${task.operation()}`)}</td>
-              <td>{task.package()}</td>
-              <td>
-                <StatusLabel
-                  type={task.status()}
-                  label={app.translator.trans(`flarum-package-manager.admin.sections.queue.statuses.${task.status()}`)} />
-              </td>
-              <td>{humanTime(task.startedAt())}</td>
-              <td>{humanTime(task.finishedAt())}</td>
-              <td className="Table-controls">
-                <Button
-                  className="Button Button--icon Table-controls-item"
-                  icon="fas fa-file-alt"
-                  aria-label={app.translator.trans('flarum-package-manager.admin.sections.queue.columns.details')}
-                  onclick={() => app.modal.show(TaskOutputModal, { task })}/>
-              </td>
-            </tr>
-          ))}
+          {this.attrs.state.tasks.map((task, index) => {
+            const extension: Extension|null = app.data.extensions[task.package()?.replace(/flarum-ext-|flarum-|\//, '-')];
+
+            return (
+              <tr key={index}>
+                <td>{app.translator.trans(`flarum-package-manager.admin.sections.queue.operations.${task.operation()}`)}</td>
+                <td>
+                  {extension ? (
+                    <div className="PackageManager-queueTable-package">
+                      <div className="PackageManager-queueTable-package-icon ExtensionIcon" style={extension.icon}>
+                        {extension.icon ? icon(extension.icon.name) : ''}
+                      </div>
+                      <div className="PackageManager-queueTable-package-details">
+                        <span className="PackageManager-queueTable-package-title">{extension.extra["flarum-extension"].title}</span>
+                        <span className="PackageManager-queueTable-package-name">{task.package()}</span>
+                      </div>
+                    </div>
+                  ) : task.package()}
+                </td>
+                <td>
+                  <StatusLabel
+                    type={task.status()}
+                    label={app.translator.trans(`flarum-package-manager.admin.sections.queue.statuses.${task.status()}`)} />
+                </td>
+                <td>{humanTime(task.startedAt())}</td>
+                <td>{humanTime(task.finishedAt())}</td>
+                <td className="Table-controls">
+                  <Button
+                    className="Button Button--icon Table-controls-item"
+                    icon="fas fa-file-alt"
+                    aria-label={app.translator.trans('flarum-package-manager.admin.sections.queue.columns.details')}
+                    onclick={() => app.modal.show(TaskOutputModal, { task })}/>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     );
