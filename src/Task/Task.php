@@ -55,6 +55,8 @@ class Task extends AbstractModel
 
     protected $casts = [
         self::CREATED_AT => 'datetime',
+        'started_at' => 'datetime',
+        'finished_at' => 'datetime',
     ];
 
     public static function build(string $operation, ?string $package): self
