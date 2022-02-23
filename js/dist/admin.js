@@ -173,6 +173,210 @@ function _setPrototypeOf(o, p) {
 
 /***/ }),
 
+/***/ "./node_modules/dayjs/plugin/duration.js":
+/*!***********************************************!*\
+  !*** ./node_modules/dayjs/plugin/duration.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+!function (t, s) {
+   true ? module.exports = s() : undefined;
+}(this, function () {
+  "use strict";
+
+  var t,
+      s,
+      n = 1e3,
+      i = 6e4,
+      e = 36e5,
+      r = 864e5,
+      o = /\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g,
+      u = 31536e6,
+      h = 2592e6,
+      a = /^(-|\+)?P(?:([-+]?[0-9,.]*)Y)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)W)?(?:([-+]?[0-9,.]*)D)?(?:T(?:([-+]?[0-9,.]*)H)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)S)?)?$/,
+      d = {
+    years: u,
+    months: h,
+    days: r,
+    hours: e,
+    minutes: i,
+    seconds: n,
+    milliseconds: 1,
+    weeks: 6048e5
+  },
+      c = function c(t) {
+    return t instanceof p;
+  },
+      f = function f(t, s, n) {
+    return new p(t, n, s.$l);
+  },
+      m = function m(t) {
+    return s.p(t) + "s";
+  },
+      l = function l(t) {
+    return t < 0;
+  },
+      $ = function $(t) {
+    return l(t) ? Math.ceil(t) : Math.floor(t);
+  },
+      y = function y(t) {
+    return Math.abs(t);
+  },
+      g = function g(t, s) {
+    return t ? l(t) ? {
+      negative: !0,
+      format: "" + y(t) + s
+    } : {
+      negative: !1,
+      format: "" + t + s
+    } : {
+      negative: !1,
+      format: ""
+    };
+  },
+      p = function () {
+    function l(t, s, n) {
+      var i = this;
+      if (this.$d = {}, this.$l = n, void 0 === t && (this.$ms = 0, this.parseFromMilliseconds()), s) return f(t * d[m(s)], this);
+      if ("number" == typeof t) return this.$ms = t, this.parseFromMilliseconds(), this;
+      if ("object" == typeof t) return Object.keys(t).forEach(function (s) {
+        i.$d[m(s)] = t[s];
+      }), this.calMilliseconds(), this;
+
+      if ("string" == typeof t) {
+        var e = t.match(a);
+
+        if (e) {
+          var r = e.slice(2).map(function (t) {
+            return null != t ? Number(t) : 0;
+          });
+          return this.$d.years = r[0], this.$d.months = r[1], this.$d.weeks = r[2], this.$d.days = r[3], this.$d.hours = r[4], this.$d.minutes = r[5], this.$d.seconds = r[6], this.calMilliseconds(), this;
+        }
+      }
+
+      return this;
+    }
+
+    var y = l.prototype;
+    return y.calMilliseconds = function () {
+      var t = this;
+      this.$ms = Object.keys(this.$d).reduce(function (s, n) {
+        return s + (t.$d[n] || 0) * d[n];
+      }, 0);
+    }, y.parseFromMilliseconds = function () {
+      var t = this.$ms;
+      this.$d.years = $(t / u), t %= u, this.$d.months = $(t / h), t %= h, this.$d.days = $(t / r), t %= r, this.$d.hours = $(t / e), t %= e, this.$d.minutes = $(t / i), t %= i, this.$d.seconds = $(t / n), t %= n, this.$d.milliseconds = t;
+    }, y.toISOString = function () {
+      var t = g(this.$d.years, "Y"),
+          s = g(this.$d.months, "M"),
+          n = +this.$d.days || 0;
+      this.$d.weeks && (n += 7 * this.$d.weeks);
+      var i = g(n, "D"),
+          e = g(this.$d.hours, "H"),
+          r = g(this.$d.minutes, "M"),
+          o = this.$d.seconds || 0;
+      this.$d.milliseconds && (o += this.$d.milliseconds / 1e3);
+      var u = g(o, "S"),
+          h = t.negative || s.negative || i.negative || e.negative || r.negative || u.negative,
+          a = e.format || r.format || u.format ? "T" : "",
+          d = (h ? "-" : "") + "P" + t.format + s.format + i.format + a + e.format + r.format + u.format;
+      return "P" === d || "-P" === d ? "P0D" : d;
+    }, y.toJSON = function () {
+      return this.toISOString();
+    }, y.format = function (t) {
+      var n = t || "YYYY-MM-DDTHH:mm:ss",
+          i = {
+        Y: this.$d.years,
+        YY: s.s(this.$d.years, 2, "0"),
+        YYYY: s.s(this.$d.years, 4, "0"),
+        M: this.$d.months,
+        MM: s.s(this.$d.months, 2, "0"),
+        D: this.$d.days,
+        DD: s.s(this.$d.days, 2, "0"),
+        H: this.$d.hours,
+        HH: s.s(this.$d.hours, 2, "0"),
+        m: this.$d.minutes,
+        mm: s.s(this.$d.minutes, 2, "0"),
+        s: this.$d.seconds,
+        ss: s.s(this.$d.seconds, 2, "0"),
+        SSS: s.s(this.$d.milliseconds, 3, "0")
+      };
+      return n.replace(o, function (t, s) {
+        return s || String(i[t]);
+      });
+    }, y.as = function (t) {
+      return this.$ms / d[m(t)];
+    }, y.get = function (t) {
+      var s = this.$ms,
+          n = m(t);
+      return "milliseconds" === n ? s %= 1e3 : s = "weeks" === n ? $(s / d[n]) : this.$d[n], 0 === s ? 0 : s;
+    }, y.add = function (t, s, n) {
+      var i;
+      return i = s ? t * d[m(s)] : c(t) ? t.$ms : f(t, this).$ms, f(this.$ms + i * (n ? -1 : 1), this);
+    }, y.subtract = function (t, s) {
+      return this.add(t, s, !0);
+    }, y.locale = function (t) {
+      var s = this.clone();
+      return s.$l = t, s;
+    }, y.clone = function () {
+      return f(this.$ms, this);
+    }, y.humanize = function (s) {
+      return t().add(this.$ms, "ms").locale(this.$l).fromNow(!s);
+    }, y.milliseconds = function () {
+      return this.get("milliseconds");
+    }, y.asMilliseconds = function () {
+      return this.as("milliseconds");
+    }, y.seconds = function () {
+      return this.get("seconds");
+    }, y.asSeconds = function () {
+      return this.as("seconds");
+    }, y.minutes = function () {
+      return this.get("minutes");
+    }, y.asMinutes = function () {
+      return this.as("minutes");
+    }, y.hours = function () {
+      return this.get("hours");
+    }, y.asHours = function () {
+      return this.as("hours");
+    }, y.days = function () {
+      return this.get("days");
+    }, y.asDays = function () {
+      return this.as("days");
+    }, y.weeks = function () {
+      return this.get("weeks");
+    }, y.asWeeks = function () {
+      return this.as("weeks");
+    }, y.months = function () {
+      return this.get("months");
+    }, y.asMonths = function () {
+      return this.as("months");
+    }, y.years = function () {
+      return this.get("years");
+    }, y.asYears = function () {
+      return this.as("years");
+    }, l;
+  }();
+
+  return function (n, i, e) {
+    t = e, s = e().$utils(), e.duration = function (t, s) {
+      var n = e.locale();
+      return f(t, {
+        $l: n
+      }, s);
+    }, e.isDuration = c;
+    var r = i.prototype.add,
+        o = i.prototype.subtract;
+    i.prototype.add = function (t, s) {
+      return c(t) && (t = t.asMilliseconds()), r.bind(this)(t, s);
+    }, i.prototype.subtract = function (t, s) {
+      return c(t) && (t = t.asMilliseconds()), o.bind(this)(t, s);
+    };
+  };
+});
+
+/***/ }),
+
 /***/ "./src/admin/components/ControlSection.tsx":
 /*!*************************************************!*\
   !*** ./src/admin/components/ControlSection.tsx ***!
@@ -639,14 +843,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var flarum_common_Component__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(flarum_common_Component__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var flarum_common_components_LoadingIndicator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! flarum/common/components/LoadingIndicator */ "flarum/common/components/LoadingIndicator");
 /* harmony import */ var flarum_common_components_LoadingIndicator__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(flarum_common_components_LoadingIndicator__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var flarum_common_utils_humanTime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! flarum/common/utils/humanTime */ "flarum/common/utils/humanTime");
-/* harmony import */ var flarum_common_utils_humanTime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(flarum_common_utils_humanTime__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! flarum/common/components/Button */ "flarum/common/components/Button");
-/* harmony import */ var flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _StatusLabel__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./StatusLabel */ "./src/admin/components/StatusLabel.tsx");
-/* harmony import */ var _TaskOutputModal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./TaskOutputModal */ "./src/admin/components/TaskOutputModal.tsx");
-/* harmony import */ var flarum_common_helpers_icon__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! flarum/common/helpers/icon */ "flarum/common/helpers/icon");
-/* harmony import */ var flarum_common_helpers_icon__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(flarum_common_helpers_icon__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! flarum/common/components/Button */ "flarum/common/components/Button");
+/* harmony import */ var flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _StatusLabel__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./StatusLabel */ "./src/admin/components/StatusLabel.tsx");
+/* harmony import */ var _TaskOutputModal__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./TaskOutputModal */ "./src/admin/components/TaskOutputModal.tsx");
+/* harmony import */ var flarum_common_helpers_icon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! flarum/common/helpers/icon */ "flarum/common/helpers/icon");
+/* harmony import */ var flarum_common_helpers_icon__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(flarum_common_helpers_icon__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _utils_humanDuration__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../utils/humanDuration */ "./src/admin/utils/humanDuration.ts");
+/* harmony import */ var flarum_common_components_Tooltip__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! flarum/common/components/Tooltip */ "flarum/common/components/Tooltip");
+/* harmony import */ var flarum_common_components_Tooltip__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(flarum_common_components_Tooltip__WEBPACK_IMPORTED_MODULE_9__);
+
 
 
 
@@ -684,7 +890,7 @@ var QueueSection = /*#__PURE__*/function (_Component) {
       className: "container"
     }, m("h2", {
       className: "ExtensionTitle"
-    }, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.title')), m(flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_5___default.a, {
+    }, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.title')), m(flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a, {
       className: "Button Button--icon",
       icon: "fas fa-sync-alt",
       onclick: function onclick() {
@@ -709,10 +915,10 @@ var QueueSection = /*#__PURE__*/function (_Component) {
 
     return m("table", {
       className: "Table PackageManager-queueTable"
-    }, m("thead", null, m("tr", null, m("th", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.columns.operation')), m("th", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.columns.package')), m("th", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.columns.status')), m("th", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.columns.started_at')), m("th", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.columns.finished_at')), m("th", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.columns.details')))), m("tbody", null, this.attrs.state.tasks.map(function (task, index) {
+    }, m("thead", null, m("tr", null, m("th", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.columns.operation')), m("th", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.columns.package')), m("th", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.columns.status')), m("th", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.columns.elapsed_time')), m("th", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.columns.details')))), m("tbody", null, this.attrs.state.tasks.map(function (task, index) {
       var _task$package;
 
-      var extension = flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.data.extensions[(_task$package = task["package"]()) == null ? void 0 : _task$package.replace(/flarum-ext-|flarum-|\//, '-')];
+      var extension = flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.data.extensions[(_task$package = task["package"]()) == null ? void 0 : _task$package.replace(/(\/flarum-|\/flarum-ext-|\/)/g, '-')];
       return m("tr", {
         key: index
       }, m("td", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans("flarum-package-manager.admin.sections.queue.operations." + task.operation())), m("td", null, extension ? m("div", {
@@ -720,23 +926,25 @@ var QueueSection = /*#__PURE__*/function (_Component) {
       }, m("div", {
         className: "PackageManager-queueTable-package-icon ExtensionIcon",
         style: extension.icon
-      }, extension.icon ? flarum_common_helpers_icon__WEBPACK_IMPORTED_MODULE_8___default()(extension.icon.name) : ''), m("div", {
+      }, extension.icon ? flarum_common_helpers_icon__WEBPACK_IMPORTED_MODULE_7___default()(extension.icon.name) : ''), m("div", {
         className: "PackageManager-queueTable-package-details"
       }, m("span", {
         className: "PackageManager-queueTable-package-title"
       }, extension.extra["flarum-extension"].title), m("span", {
         className: "PackageManager-queueTable-package-name"
-      }, task["package"]()))) : task["package"]()), m("td", null, m(_StatusLabel__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      }, task["package"]()))) : task["package"]()), m("td", null, m(_StatusLabel__WEBPACK_IMPORTED_MODULE_5__["default"], {
         type: task.status(),
         label: flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans("flarum-package-manager.admin.sections.queue.statuses." + task.status())
-      })), m("td", null, flarum_common_utils_humanTime__WEBPACK_IMPORTED_MODULE_4___default()(task.startedAt())), m("td", null, flarum_common_utils_humanTime__WEBPACK_IMPORTED_MODULE_4___default()(task.finishedAt())), m("td", {
+      })), m("td", null, m(flarum_common_components_Tooltip__WEBPACK_IMPORTED_MODULE_9___default.a, {
+        text: dayjs(task.startedAt()).format('LL LTS') + "  " + dayjs(task.finishedAt()).format('LL LTS')
+      }, m("span", null, Object(_utils_humanDuration__WEBPACK_IMPORTED_MODULE_8__["default"])(task.startedAt(), task.finishedAt())))), m("td", {
         className: "Table-controls"
-      }, m(flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_5___default.a, {
+      }, m(flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a, {
         className: "Button Button--icon Table-controls-item",
         icon: "fas fa-file-alt",
         "aria-label": flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.columns.details'),
         onclick: function onclick() {
-          return flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.modal.show(_TaskOutputModal__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          return flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.modal.show(_TaskOutputModal__WEBPACK_IMPORTED_MODULE_6__["default"], {
             task: task
           });
         }
@@ -901,13 +1109,13 @@ var TaskOutputModal = /*#__PURE__*/function (_Modal) {
       className: "TaskOutputModal-data"
     }, m("div", {
       className: "Form-group"
-    }, m("label", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.output_modal.command')), m("pre", {
-      className: "TaskOutputModal-data-command"
-    }, "composer ", this.attrs.task.command())), m("div", {
+    }, m("label", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.output_modal.command')), m("div", {
+      className: "FormControl TaskOutputModal-data-command"
+    }, m("code", null, "$ composer ", this.attrs.task.command()))), m("div", {
       className: "Form-group"
-    }, m("label", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.output_modal.output')), m("code", {
-      className: "TaskOutputModal-data-output"
-    }, m("pre", null, this.attrs.task.output())))));
+    }, m("label", null, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flarum-package-manager.admin.sections.queue.output_modal.output')), m("div", {
+      className: "FormControl TaskOutputModal-data-output"
+    }, m("code", null, m("pre", null, this.attrs.task.output()))))));
   };
 
   return TaskOutputModal;
@@ -1556,6 +1764,27 @@ function handleAsyncProcessing(xhr, refresh) {
 
 /***/ }),
 
+/***/ "./src/admin/utils/humanDuration.ts":
+/*!******************************************!*\
+  !*** ./src/admin/utils/humanDuration.ts ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return humanDuration; });
+/* harmony import */ var dayjs_plugin_duration__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dayjs/plugin/duration */ "./node_modules/dayjs/plugin/duration.js");
+/* harmony import */ var dayjs_plugin_duration__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(dayjs_plugin_duration__WEBPACK_IMPORTED_MODULE_0__);
+
+function humanDuration(start, end) {
+  dayjs.extend(dayjs_plugin_duration__WEBPACK_IMPORTED_MODULE_0___default.a);
+  var durationTime = dayjs(end).diff(start);
+  return dayjs.duration(durationTime).humanize();
+}
+
+/***/ }),
+
 /***/ "flarum/admin/app":
 /*!**************************************************!*\
   !*** external "flarum.core.compat['admin/app']" ***!
@@ -1740,17 +1969,6 @@ module.exports = flarum.core.compat['common/utils/classList'];
 /***/ (function(module, exports) {
 
 module.exports = flarum.core.compat['common/utils/extractText'];
-
-/***/ }),
-
-/***/ "flarum/common/utils/humanTime":
-/*!***************************************************************!*\
-  !*** external "flarum.core.compat['common/utils/humanTime']" ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = flarum.core.compat['common/utils/humanTime'];
 
 /***/ })
 

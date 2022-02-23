@@ -21,11 +21,17 @@ export default class TaskOutputModal extends Modal<TaskOutputModalAttrs> {
         <div className="TaskOutputModal-data">
           <div className="Form-group">
             <label>{app.translator.trans('flarum-package-manager.admin.sections.queue.output_modal.command')}</label>
-            <pre className="TaskOutputModal-data-command">composer {this.attrs.task.command()}</pre>
+            <div className="FormControl TaskOutputModal-data-command">
+              <code>$ composer {this.attrs.task.command()}</code>
+            </div>
           </div>
           <div className="Form-group">
             <label>{app.translator.trans('flarum-package-manager.admin.sections.queue.output_modal.output')}</label>
-            <code className="TaskOutputModal-data-output"><pre>{this.attrs.task.output()}</pre></code>
+            <div className="FormControl TaskOutputModal-data-output">
+              <code>
+                <pre>{this.attrs.task.output()}</pre>
+              </code>
+            </div>
           </div>
         </div>
       </div>

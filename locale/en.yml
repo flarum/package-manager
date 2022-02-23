@@ -44,6 +44,7 @@ flarum-package-manager:
       queue:
         columns:
           details: Details
+          elapsed_time: Completed in
           finished_at: Finish Time
           operation: Operation
           package: Package

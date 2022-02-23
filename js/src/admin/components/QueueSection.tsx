@@ -9,6 +9,8 @@ import StatusLabel from "./StatusLabel";
 import TaskOutputModal from "./TaskOutputModal";
 import {Extension} from "flarum/admin/AdminApplication";
 import icon from "flarum/common/helpers/icon";
+import humanDuration from "../utils/humanDuration";
+import Tooltip from "flarum/common/components/Tooltip";
 
 interface QueueSectionAttrs extends ComponentAttrs {
   state: QueueState;
@@ -61,14 +63,13 @@ export default class QueueSection extends Component<QueueSectionAttrs> {
             <th>{app.translator.trans('flarum-package-manager.admin.sections.queue.columns.operation')}</th>
             <th>{app.translator.trans('flarum-package-manager.admin.sections.queue.columns.package')}</th>
             <th>{app.translator.trans('flarum-package-manager.admin.sections.queue.columns.status')}</th>
-            <th>{app.translator.trans('flarum-package-manager.admin.sections.queue.columns.started_at')}</th>
-            <th>{app.translator.trans('flarum-package-manager.admin.sections.queue.columns.finished_at')}</th>
+            <th>{app.translator.trans('flarum-package-manager.admin.sections.queue.columns.elapsed_time')}</th>
             <th>{app.translator.trans('flarum-package-manager.admin.sections.queue.columns.details')}</th>
           </tr>
         </thead>
         <tbody>
           {this.attrs.state.tasks.map((task, index) => {
-            const extension: Extension|null = app.data.extensions[task.package()?.replace(/flarum-ext-|flarum-|\//, '-')];
+            const extension: Extension|null = app.data.extensions[task.package()?.replace(/(\/flarum-|\/flarum-ext-|\/)/g, '-')];
 
             return (
               <tr key={index}>
@@ -91,8 +92,11 @@ export default class QueueSection extends Component<QueueSectionAttrs> {
                     type={task.status()}
                     label={app.translator.trans(`flarum-package-manager.admin.sections.queue.statuses.${task.status()}`)} />
                 </td>
-                <td>{humanTime(task.startedAt())}</td>
-                <td>{humanTime(task.finishedAt())}</td>
+                <td>
+                  <Tooltip text={`${dayjs(task.startedAt()).format('LL LTS')}  ${dayjs(task.finishedAt()).format('LL LTS')}`}>
+                    <span>{humanDuration(task.startedAt(), task.finishedAt())}</span>
+                  </Tooltip>
+                </td>
                 <td className="Table-controls">
                   <Button
                     className="Button Button--icon Table-controls-item"

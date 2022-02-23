@@ -26,10 +26,10 @@ export default class Task extends Model {
   }
 
   startedAt() {
-    return Model.attribute('startedAt', Model.transformDate).call(this);
+    return Model.attribute<Date, string>('startedAt', Model.transformDate).call(this);
   }
 
   finishedAt() {
-    return Model.attribute('finishedAt', Model.transformDate).call(this);
+    return Model.attribute<Date, string>('finishedAt', Model.transformDate).call(this);
   }
 }
