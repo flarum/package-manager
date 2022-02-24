@@ -1,6 +1,6 @@
 import Mithril from 'mithril';
 import app from 'flarum/admin/app';
-import Component, {ComponentAttrs} from 'flarum/common/Component';
+import Component, { ComponentAttrs } from 'flarum/common/Component';
 import Button from 'flarum/common/components/Button';
 import humanTime from 'flarum/common/helpers/humanTime';
 import LoadingModal from 'flarum/admin/components/LoadingModal';
@@ -8,9 +8,9 @@ import errorHandler from '../utils/errorHandler';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 import MajorUpdater from './MajorUpdater';
 import ExtensionItem, { Extension } from './ExtensionItem';
-import extractText from "flarum/common/utils/extractText";
-import handleAsyncProcessing from "../utils/handleAsyncProcessing";
-import QueueState from "../states/QueueState";
+import extractText from 'flarum/common/utils/extractText';
+import handleAsyncProcessing from '../utils/handleAsyncProcessing';
+import QueueState from '../states/QueueState';
 
 export type UpdatedPackage = {
   name: string;

@@ -1,16 +1,14 @@
 import app from 'flarum/admin/app';
-import Task from "../models/Task";
+import Task from '../models/Task';
 
 export default class QueueState {
-  tasks?: Task[]|null;
+  tasks?: Task[] | null;
 
   loadTasks() {
     this.tasks = null;
 
-    return app.store
-      .find<Task[]>('package-manager-tasks', {})
-      .then((data) => {
-        this.tasks = data;
-      });
+    return app.store.find<Task[]>('package-manager-tasks', {}).then((data) => {
+      this.tasks = data;
+    });
   }
 }

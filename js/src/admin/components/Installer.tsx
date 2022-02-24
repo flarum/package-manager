@@ -1,12 +1,13 @@
 import type Mithril from 'mithril';
 import app from 'flarum/admin/app';
-import Component, {ComponentAttrs} from 'flarum/common/Component';
+import Component, { ComponentAttrs } from 'flarum/common/Component';
 import Button from 'flarum/common/components/Button';
 import Stream from 'flarum/common/utils/Stream';
 import LoadingModal from 'flarum/admin/components/LoadingModal';
+
 import errorHandler from '../utils/errorHandler';
-import QueueState from "../states/QueueState";
-import handleAsyncProcessing from "../utils/handleAsyncProcessing";
+import QueueState from '../states/QueueState';
+import handleAsyncProcessing from '../utils/handleAsyncProcessing';
 
 interface InstallerAttrs extends ComponentAttrs {
   queueState: QueueState;

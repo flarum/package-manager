@@ -1,4 +1,4 @@
-import app from "flarum/admin/app";
+import app from 'flarum/admin/app';
 
 export default function handleAsyncProcessing(xhr: XMLHttpRequest, refresh: () => Promise<any>): XMLHttpRequest {
   /**

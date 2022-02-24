@@ -1,4 +1,4 @@
-import Mithril from 'mithril';
+import type Mithril from 'mithril';
 import app from 'flarum/admin/app';
 import Component, { ComponentAttrs } from 'flarum/common/Component';
 import classList from 'flarum/common/utils/classList';
@@ -6,9 +6,10 @@ import icon from 'flarum/common/helpers/icon';
 import Tooltip from 'flarum/common/components/Tooltip';
 import Button from 'flarum/common/components/Button';
 import { Extension as BaseExtension } from 'flarum/admin/AdminApplication';
+
 import { UpdatedPackage } from './Updater';
 import WhyNotModal from './WhyNotModal';
-import Label from "./Label";
+import Label from './Label';
 
 /*
  * @todo fix in core
@@ -52,16 +53,6 @@ export default class ExtensionItem<Attrs extends ExtensionItemAttrs = ExtensionI
                 {this.version(latestVersion)}
               </Label>
             ) : null}
-            {/*{updates['latest-minor'] ? (*/}
-            {/*  <span className="PackageManager-extension-version-latest PackageManager-extension-version-latest--minor">*/}
-            {/*    {this.version(updates['latest-minor']!)}*/}
-            {/*  </span>*/}
-            {/*) : null}*/}
-            {/*{updates['latest-major'] && !isCore ? (*/}
-            {/*  <span className="PackageManager-extension-version-latest PackageManager-extension-version-latest--major">*/}
-            {/*    {this.version(updates['latest-major']!)}*/}
-            {/*  </span>*/}
-            {/*) : null}*/}
           </div>
         </div>
         <div className="PackageManager-extension-controls">
@@ -90,7 +81,7 @@ export default class ExtensionItem<Attrs extends ExtensionItemAttrs = ExtensionI
     );
   }
 
-  private version(v: string): string {
+  version(v: string): string {
     return 'v' + v.replace('v', '');
   }
 }

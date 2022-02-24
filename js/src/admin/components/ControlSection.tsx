@@ -1,9 +1,10 @@
-import Component, {ComponentAttrs} from 'flarum/common/Component';
-import Alert from "flarum/common/components/Alert";
-import Installer from "./Installer";
-import Updater from "./Updater";
-import app from "flarum/admin/app";
-import QueueState from "../states/QueueState";
+import app from 'flarum/admin/app';
+import Component, { ComponentAttrs } from 'flarum/common/Component';
+import Alert from 'flarum/common/components/Alert';
+
+import Installer from './Installer';
+import Updater from './Updater';
+import QueueState from '../states/QueueState';
 
 interface ControlSectionAttrs extends ComponentAttrs {
   queueState: QueueState;

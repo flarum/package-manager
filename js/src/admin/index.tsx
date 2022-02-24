@@ -4,7 +4,7 @@ import ExtensionPage from 'flarum/admin/components/ExtensionPage';
 import Button from 'flarum/common/components/Button';
 import LoadingModal from 'flarum/admin/components/LoadingModal';
 import isExtensionEnabled from 'flarum/admin/utils/isExtensionEnabled';
-import SettingsPage from "./components/SettingsPage";
+import SettingsPage from './components/SettingsPage';
 
 import Task from './models/Task';
 
@@ -18,7 +18,7 @@ app.initializers.add('flarum-package-manager', (app) => {
       label: app.translator.trans('flarum-package-manager.admin.settings.queue_jobs'),
       default: false,
       type: 'boolean',
-      disabled: app.data['flarum-package-manager.using_sync_queue']
+      disabled: app.data['flarum-package-manager.using_sync_queue'],
     })
     .registerPage(SettingsPage);
 

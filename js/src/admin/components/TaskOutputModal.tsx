@@ -1,9 +1,9 @@
 import app from 'flarum/admin/app';
-import Modal, {IInternalModalAttrs} from 'flarum/common/components/Modal';
-import Task from "../models/Task";
+import Modal, { IInternalModalAttrs } from 'flarum/common/components/Modal';
+import Task from '../models/Task';
 
 interface TaskOutputModalAttrs extends IInternalModalAttrs {
-  task: Task
+  task: Task;
 }
 
 export default class TaskOutputModal extends Modal<TaskOutputModalAttrs> {

@@ -1,15 +1,16 @@
+import type Mithril from 'mithril';
 import app from 'flarum/admin/app';
 import Component, { ComponentAttrs } from 'flarum/common/Component';
-import Mithril from 'mithril';
 import Button from 'flarum/common/components/Button';
 import Tooltip from 'flarum/common/components/Tooltip';
-import { UpdatedPackage, UpdateState } from './Updater';
 import LoadingModal from 'flarum/admin/components/LoadingModal';
-import errorHandler from '../utils/errorHandler';
 import Alert from 'flarum/common/components/Alert';
-import WhyNotModal from './WhyNotModal';
 import RequestError from 'flarum/common/utils/RequestError';
-import ExtensionItem, { Extension } from './ExtensionItem';
+
+import { UpdatedPackage, UpdateState } from './Updater';
+import errorHandler from '../utils/errorHandler';
+import WhyNotModal from './WhyNotModal';
+import ExtensionItem from './ExtensionItem';
 
 interface MajorUpdaterAttrs extends ComponentAttrs {
   coreUpdate: UpdatedPackage;
