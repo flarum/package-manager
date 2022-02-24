@@ -6,14 +6,14 @@ import Button from 'flarum/common/components/Button';
 import Tooltip from 'flarum/common/components/Tooltip';
 import { Extension } from 'flarum/admin/AdminApplication';
 import icon from 'flarum/common/helpers/icon';
+import ItemList from "flarum/common/utils/ItemList";
+import extractText from "flarum/common/utils/extractText";
 
 import QueueState from '../states/QueueState';
 import Label from './Label';
 import TaskOutputModal from './TaskOutputModal';
 import humanDuration from '../utils/humanDuration';
-import Task from '../models/Task';
-import ItemList from "flarum/common/utils/ItemList";
-import extractText from "flarum/common/utils/extractText";
+import Task, {TaskOperations} from '../models/Task';
 
 interface QueueSectionAttrs extends ComponentAttrs {
   state: QueueState;
@@ -55,7 +55,12 @@ export default class QueueSection extends Component<QueueSectionAttrs> {
 
     items.add('operation', {
       label: extractText(app.translator.trans('flarum-package-manager.admin.sections.queue.columns.operation')),
-      content: (task) => app.translator.trans(`flarum-package-manager.admin.sections.queue.operations.${task.operation()}`)
+      content: (task) => (
+        <div className="PackageManager-queueTable-operation">
+          <span className="PackageManager-queueTable-operation-icon">{this.operationIcon(task.operation())}</span>
+          <span className="PackageManager-queueTable-operation-name">{app.translator.trans(`flarum-package-manager.admin.sections.queue.operations.${task.operation()}`)}</span>
+        </div>
+      )
     }, 80);
 
     items.add('package', {
@@ -149,5 +154,18 @@ export default class QueueSection extends Component<QueueSectionAttrs> {
         ))}</tbody>
       </table>
     );
+  }
+
+  operationIcon(operation: TaskOperations): Mithril.Children {
+    return icon({
+      'update_check': 'fas fa-sync-alt',
+      'update_major': 'fas fa-play',
+      'update_minor': 'fas fa-play',
+      'update_global': 'fas fa-play',
+      'extension_install': 'fas fa-download',
+      'extension_remove': 'fas fa-times',
+      'extension_update': 'fas fa-arrow-alt-circle-up',
+      'why_not': 'fas fa-exclamation-circle',
+    }[operation]);
   }
 }
