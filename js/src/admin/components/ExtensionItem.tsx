@@ -8,6 +8,7 @@ import Button from 'flarum/common/components/Button';
 import { Extension as BaseExtension } from 'flarum/admin/AdminApplication';
 import { UpdatedPackage } from './Updater';
 import WhyNotModal from './WhyNotModal';
+import Label from "./Label";
 
 /*
  * @todo fix in core
@@ -29,6 +30,7 @@ export interface ExtensionItemAttrs extends ComponentAttrs {
 export default class ExtensionItem<Attrs extends ExtensionItemAttrs = ExtensionItemAttrs> extends Component<Attrs> {
   view(vnode: Mithril.Vnode<Attrs, this>): Mithril.Children {
     const { extension, updates, onClickUpdate, whyNotWarning, isCore, isDanger } = this.attrs;
+    const latestVersion = updates['latest-minor'] ?? (updates['latest-major'] && !isCore ? updates['latest-major'] : null);
 
     return (
       <div
@@ -45,16 +47,21 @@ export default class ExtensionItem<Attrs extends ExtensionItemAttrs = ExtensionI
           <div className="PackageManager-extension-name">{extension.extra['flarum-extension'].title}</div>
           <div className="PackageManager-extension-version">
             <span className="PackageManager-extension-version-current">{this.version(extension.version)}</span>
-            {updates['latest-minor'] ? (
-              <span className="PackageManager-extension-version-latest PackageManager-extension-version-latest--minor">
-                {this.version(updates['latest-minor']!)}
-              </span>
+            {latestVersion ? (
+              <Label className="PackageManager-extension-version-latest" type={updates['latest-minor'] ? 'success' : 'warning'}>
+                {this.version(latestVersion)}
+              </Label>
             ) : null}
-            {updates['latest-major'] && !isCore ? (
-              <span className="PackageManager-extension-version-latest PackageManager-extension-version-latest--major">
-                {this.version(updates['latest-major']!)}
-              </span>
-            ) : null}
+            {/*{updates['latest-minor'] ? (*/}
+            {/*  <span className="PackageManager-extension-version-latest PackageManager-extension-version-latest--minor">*/}
+            {/*    {this.version(updates['latest-minor']!)}*/}
+            {/*  </span>*/}
+            {/*) : null}*/}
+            {/*{updates['latest-major'] && !isCore ? (*/}
+            {/*  <span className="PackageManager-extension-version-latest PackageManager-extension-version-latest--major">*/}
+            {/*    {this.version(updates['latest-major']!)}*/}
+            {/*  </span>*/}
+            {/*) : null}*/}
           </div>
         </div>
         <div className="PackageManager-extension-controls">

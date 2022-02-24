@@ -1,4 +1,4 @@
-@import "admin/StatusLabel";
+@import "admin/Label";
 @import "admin/TaskOutputModal";
 
 .FormControl-container {
@@ -23,6 +23,10 @@
     &::before, &::after {
       content: none;
     }
+  }
+
+  .Label {
+    text-transform: uppercase;
   }
 
   .Table {
@@ -92,19 +96,9 @@
     gap: 8px;
 
     &-latest {
-      border-radius: 30px;
-      padding: 0 6px;
-      font-weight: bold;
-
-      &--minor {
-        background-color: var(--alert-success-bg);
-        color: var(--alert-success-color);
-      }
-
-      &--major {
-        background-color: var(--alert-bg);
-        color: var(--alert-color);
-      }
+      text-transform: lowercase;
+      padding: 2px 6px;
+      font-size: 0.7rem;
     }
   }
 
@@ -191,22 +185,24 @@
   }
 }
 
-.PackageManager-queueTable-package {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  &-icon {
-    --size: 30px;
-  }
-
-  &-details {
+.PackageManager-queueTable {
+  &-package {
     display: flex;
-    flex-direction: column;
-  }
+    align-items: center;
+    gap: 8px;
 
-  &-name {
-    font-size: 0.7rem;
+    &-icon {
+      --size: 30px;
+    }
+
+    &-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &-name {
+      font-size: 0.7rem;
+    }
   }
 }
 

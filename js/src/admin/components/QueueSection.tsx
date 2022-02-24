@@ -5,7 +5,7 @@ import humanTime from "flarum/common/utils/humanTime";
 import type Mithril from "mithril";
 import Button from "flarum/common/components/Button";
 import QueueState from "../states/QueueState";
-import StatusLabel from "./StatusLabel";
+import Label from "./Label";
 import TaskOutputModal from "./TaskOutputModal";
 import {Extension} from "flarum/admin/AdminApplication";
 import icon from "flarum/common/helpers/icon";
@@ -88,9 +88,11 @@ export default class QueueSection extends Component<QueueSectionAttrs> {
                   ) : task.package()}
                 </td>
                 <td>
-                  <StatusLabel
-                    type={task.status()}
-                    label={app.translator.trans(`flarum-package-manager.admin.sections.queue.statuses.${task.status()}`)} />
+                  <Label
+                    className="PackageManager-queueTable-status"
+                    type={{running: 'neutral', failure: 'error', pending: 'warning', success: 'success'}[task.status()]}>
+                    {app.translator.trans(`flarum-package-manager.admin.sections.queue.statuses.${task.status()}`)}
+                  </Label>
                 </td>
                 <td>
                   <Tooltip text={`${dayjs(task.startedAt()).format('LL LTS')}  ${dayjs(task.finishedAt()).format('LL LTS')}`}>
