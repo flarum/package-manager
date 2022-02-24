@@ -12,9 +12,16 @@ import Label from './Label';
 import TaskOutputModal from './TaskOutputModal';
 import humanDuration from '../utils/humanDuration';
 import Task from '../models/Task';
+import ItemList from "flarum/common/utils/ItemList";
+import extractText from "flarum/common/utils/extractText";
 
 interface QueueSectionAttrs extends ComponentAttrs {
   state: QueueState;
+}
+
+interface QueueTableColumn extends ComponentAttrs {
+  label: string;
+  content: (task: Task) => Mithril.Children
 }
 
 export default class QueueSection extends Component<QueueSectionAttrs> {
@@ -43,6 +50,72 @@ export default class QueueSection extends Component<QueueSectionAttrs> {
     );
   }
 
+  columns() {
+    const items = new ItemList<QueueTableColumn>();
+
+    items.add('operation', {
+      label: extractText(app.translator.trans('flarum-package-manager.admin.sections.queue.columns.operation')),
+      content: (task) => app.translator.trans(`flarum-package-manager.admin.sections.queue.operations.${task.operation()}`)
+    }, 80);
+
+    items.add('package', {
+      label: extractText(app.translator.trans('flarum-package-manager.admin.sections.queue.columns.package')),
+      content: (task) => {
+        const extension: Extension | null = app.data.extensions[task.package()?.replace(/(\/flarum-|\/flarum-ext-|\/)/g, '-')];
+
+        return extension ? (
+          <div className="PackageManager-queueTable-package">
+            <div className="PackageManager-queueTable-package-icon ExtensionIcon" style={extension.icon}>
+              {extension.icon ? icon(extension.icon.name) : ''}
+            </div>
+            <div className="PackageManager-queueTable-package-details">
+              <span className="PackageManager-queueTable-package-title">{extension.extra['flarum-extension'].title}</span>
+              <span className="PackageManager-queueTable-package-name">{task.package()}</span>
+            </div>
+          </div>
+        ) : task.package()
+      }
+    }, 75);
+
+    items.add('status', {
+      label: extractText(app.translator.trans('flarum-package-manager.admin.sections.queue.columns.status')),
+      content: (task) => (
+        <Label
+          className="PackageManager-queueTable-status"
+          type={{ running: 'neutral', failure: 'error', pending: 'warning', success: 'success' }[task.status()]}
+        >
+          {app.translator.trans(`flarum-package-manager.admin.sections.queue.statuses.${task.status()}`)}
+        </Label>
+      )
+    }, 70);
+
+    items.add('elapsedTime', {
+      label: extractText(app.translator.trans('flarum-package-manager.admin.sections.queue.columns.elapsed_time')),
+      content: (task) => (
+        <Tooltip text={`${dayjs(task.startedAt()).format('LL LTS')}  ${dayjs(task.finishedAt()).format('LL LTS')}`}>
+          <span>{humanDuration(task.startedAt(), task.finishedAt())}</span>
+        </Tooltip>
+      )
+    }, 65);
+
+    items.add('details', {
+      label: extractText(app.translator.trans('flarum-package-manager.admin.sections.queue.columns.details')),
+      content: (task) => (
+        <Button
+          className="Button Button--icon Table-controls-item"
+          icon="fas fa-file-alt"
+          aria-label={app.translator.trans('flarum-package-manager.admin.sections.queue.columns.details')}
+          // @todo fix in core
+          // @ts-ignore
+          onclick={() => app.modal.show(TaskOutputModal, { task })}
+        />
+      ),
+      className: 'Table-controls',
+    }, 60);
+
+    return items;
+  }
+
   queueTable() {
     if (!this.attrs.state.tasks) {
       return <LoadingIndicator />;
@@ -52,67 +125,29 @@ export default class QueueSection extends Component<QueueSectionAttrs> {
       return <h3 className="ExtensionPage-subHeader">{app.translator.trans('flarum-package-manager.admin.sections.queue.none')}</h3>;
     }
 
+    const columns = this.columns();
+
     return (
       <table className="Table PackageManager-queueTable">
         <thead>
           <tr>
-            <th>{app.translator.trans('flarum-package-manager.admin.sections.queue.columns.operation')}</th>
-            <th>{app.translator.trans('flarum-package-manager.admin.sections.queue.columns.package')}</th>
-            <th>{app.translator.trans('flarum-package-manager.admin.sections.queue.columns.status')}</th>
-            <th>{app.translator.trans('flarum-package-manager.admin.sections.queue.columns.elapsed_time')}</th>
-            <th>{app.translator.trans('flarum-package-manager.admin.sections.queue.columns.details')}</th>
+            {columns.toArray().map((item, index) => (
+              <th key={index}>{item.label}</th>
+            ))}
           </tr>
         </thead>
-        <tbody>{this.attrs.state.tasks.map(this.taskRow.bind(this))}</tbody>
+        <tbody>{this.attrs.state.tasks.map((task, index) => (
+          <tr key={index}>
+            {columns.toArray().map((item, index) => {
+              const { label, content, ...attrs } = item;
+
+              return (
+                <td key={index} {...attrs}>{content(task)}</td>
+              );
+            })}
+          </tr>
+        ))}</tbody>
       </table>
-    );
-  }
-
-  taskRow(task: Task, index: number) {
-    const extension: Extension | null = app.data.extensions[task.package()?.replace(/(\/flarum-|\/flarum-ext-|\/)/g, '-')];
-
-    return (
-      <tr key={index}>
-        <td>{app.translator.trans(`flarum-package-manager.admin.sections.queue.operations.${task.operation()}`)}</td>
-        <td>
-          {extension ? (
-            <div className="PackageManager-queueTable-package">
-              <div className="PackageManager-queueTable-package-icon ExtensionIcon" style={extension.icon}>
-                {extension.icon ? icon(extension.icon.name) : ''}
-              </div>
-              <div className="PackageManager-queueTable-package-details">
-                <span className="PackageManager-queueTable-package-title">{extension.extra['flarum-extension'].title}</span>
-                <span className="PackageManager-queueTable-package-name">{task.package()}</span>
-              </div>
-            </div>
-          ) : (
-            task.package()
-          )}
-        </td>
-        <td>
-          <Label
-            className="PackageManager-queueTable-status"
-            type={{ running: 'neutral', failure: 'error', pending: 'warning', success: 'success' }[task.status()]}
-          >
-            {app.translator.trans(`flarum-package-manager.admin.sections.queue.statuses.${task.status()}`)}
-          </Label>
-        </td>
-        <td>
-          <Tooltip text={`${dayjs(task.startedAt()).format('LL LTS')}  ${dayjs(task.finishedAt()).format('LL LTS')}`}>
-            <span>{humanDuration(task.startedAt(), task.finishedAt())}</span>
-          </Tooltip>
-        </td>
-        <td className="Table-controls">
-          <Button
-            className="Button Button--icon Table-controls-item"
-            icon="fas fa-file-alt"
-            aria-label={app.translator.trans('flarum-package-manager.admin.sections.queue.columns.details')}
-            // @todo fix in core
-            // @ts-ignore
-            onclick={() => app.modal.show(TaskOutputModal, { task })}
-          />
-        </td>
-      </tr>
     );
   }
 }
