@@ -7,9 +7,14 @@ import isExtensionEnabled from 'flarum/admin/utils/isExtensionEnabled';
 import SettingsPage from './components/SettingsPage';
 
 import Task from './models/Task';
+import isQueuingCommands from './utils/isQueuingCommands';
+import jumpToQueue from './utils/jumpToQueue';
+import QueueState from './states/QueueState';
 
 app.initializers.add('flarum-package-manager', (app) => {
   app.store.models['package-manager-tasks'] = Task;
+
+  app.packageManagerQueue = new QueueState();
 
   app.extensionData
     .for('flarum-package-manager')
@@ -41,8 +46,12 @@ app.initializers.add('flarum-package-manager', (app) => {
               method: 'DELETE',
             })
             .then(() => {
-              app.alerts.show({ type: 'success' }, app.translator.trans('flarum-package-manager.admin.extensions.successful_remove'));
-              window.location = app.forum.attribute('adminUrl');
+              if (isQueuingCommands()) {
+                jumpToQueue();
+              } else {
+                app.alerts.show({ type: 'success' }, app.translator.trans('flarum-package-manager.admin.extensions.successful_remove'));
+                window.location = app.forum.attribute('adminUrl');
+              }
             })
             .finally(() => {
               app.modal.close();

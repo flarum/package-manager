@@ -1,16 +1,11 @@
 import app from 'flarum/admin/app';
-import Component, { ComponentAttrs } from 'flarum/common/Component';
+import Component from 'flarum/common/Component';
 import Alert from 'flarum/common/components/Alert';
 
 import Installer from './Installer';
 import Updater from './Updater';
-import QueueState from '../states/QueueState';
 
-interface ControlSectionAttrs extends ComponentAttrs {
-  queueState: QueueState;
-}
-
-export default class ControlSection extends Component<ControlSectionAttrs> {
+export default class ControlSection extends Component {
   view() {
     return (
       <div className="ExtensionPage-permissions PackageManager-controlSection">
@@ -22,8 +17,8 @@ export default class ControlSection extends Component<ControlSectionAttrs> {
         <div className="container">
           {app.data['flarum-package-manager.writable_dirs'] ? (
             <>
-              <Installer queueState={this.attrs.queueState} />
-              <Updater queueState={this.attrs.queueState} />
+              <Installer />
+              <Updater />
             </>
           ) : (
             <div className="Form-group">

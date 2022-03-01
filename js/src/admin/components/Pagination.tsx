@@ -1,7 +1,7 @@
 import app from 'flarum/admin/app';
 import Component, { ComponentAttrs } from 'flarum/common/Component';
-import Button from "flarum/common/components/Button";
-import QueueState from "../states/QueueState";
+import Button from 'flarum/common/components/Button';
+import QueueState from '../states/QueueState';
 
 interface PaginationAttrs extends ComponentAttrs {
   list: QueueState;

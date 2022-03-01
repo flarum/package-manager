@@ -1,7 +1,6 @@
 import app from 'flarum/admin/app';
 import Task from '../models/Task';
-import {ApiQueryParamsPlural, ApiResponsePlural} from "flarum/common/Store";
-import Model from "flarum/common/Model";
+import { ApiQueryParamsPlural } from 'flarum/common/Store';
 
 export default class QueueState {
   private tasks: Task[] | null = null;
@@ -20,16 +19,14 @@ export default class QueueState {
       ...params,
     };
 
-    return app.store
-      .find<Task[]>('package-manager-tasks', params || {})
-      .then((data) => {
-        this.tasks = data;
-        this.total = data.payload.meta?.total;
+    return app.store.find<Task[]>('package-manager-tasks', params || {}).then((data) => {
+      this.tasks = data;
+      this.total = data.payload.meta?.total;
 
-        m.redraw();
+      m.redraw();
 
-        return data;
-      });
+      return data;
+    });
   }
 
   getItems() {

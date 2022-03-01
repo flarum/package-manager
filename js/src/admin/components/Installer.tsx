@@ -6,12 +6,10 @@ import Stream from 'flarum/common/utils/Stream';
 import LoadingModal from 'flarum/admin/components/LoadingModal';
 
 import errorHandler from '../utils/errorHandler';
-import QueueState from '../states/QueueState';
-import handleAsyncProcessing from '../utils/handleAsyncProcessing';
+import isQueuingCommands from '../utils/isQueuingCommands';
+import jumpToQueue from '../utils/jumpToQueue';
 
-interface InstallerAttrs extends ComponentAttrs {
-  queueState: QueueState;
-}
+interface InstallerAttrs extends ComponentAttrs {}
 
 export default class Installer extends Component<InstallerAttrs> {
   packageName!: Stream<string>;
@@ -60,16 +58,19 @@ export default class Installer extends Component<InstallerAttrs> {
           data: this.data(),
         },
         errorHandler,
-        config: (xhr) => handleAsyncProcessing(xhr, () => this.attrs.queueState.load()),
       })
       .then((response) => {
-        const extensionId = response.id;
-        app.alerts.show(
-          { type: 'success' },
-          app.translator.trans('flarum-package-manager.admin.extensions.successful_install', { extension: extensionId })
-        );
-        window.location.href = `${app.forum.attribute('adminUrl')}#/extension/${extensionId}`;
-        window.location.reload();
+        if (isQueuingCommands()) {
+          jumpToQueue();
+        } else {
+          const extensionId = response.id;
+          app.alerts.show(
+            { type: 'success' },
+            app.translator.trans('flarum-package-manager.admin.extensions.successful_install', { extension: extensionId })
+          );
+          window.location.href = `${app.forum.attribute('adminUrl')}#/extension/${extensionId}`;
+          window.location.reload();
+        }
       })
       .finally(() => {
         this.isLoading = false;

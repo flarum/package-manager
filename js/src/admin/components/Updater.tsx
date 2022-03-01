@@ -9,8 +9,8 @@ import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 import MajorUpdater from './MajorUpdater';
 import ExtensionItem, { Extension } from './ExtensionItem';
 import extractText from 'flarum/common/utils/extractText';
-import handleAsyncProcessing from '../utils/handleAsyncProcessing';
-import QueueState from '../states/QueueState';
+import isQueuingCommands from '../utils/isQueuingCommands';
+import jumpToQueue from '../utils/jumpToQueue';
 
 export type UpdatedPackage = {
   name: string;
@@ -46,9 +46,7 @@ export type LastUpdateRun = {
   limitedPackages: () => string[];
 };
 
-interface UpdaterAttrs extends ComponentAttrs {
-  queueState: QueueState;
-}
+interface UpdaterAttrs extends ComponentAttrs {}
 
 export default class Updater extends Component<UpdaterAttrs> {
   isLoading: string | null = null;
@@ -184,12 +182,13 @@ export default class Updater extends Component<UpdaterAttrs> {
         method: 'POST',
         url: `${app.forum.attribute('apiUrl')}/package-manager/check-for-updates`,
         errorHandler,
-        config: (xhr) => handleAsyncProcessing(xhr, () => this.attrs.queueState.load()),
       })
       .then((response) => {
-        // @TODO, I wish the response had more than just the payload, need status code here to determine
-        // if the server is handling this asynchronously.
-        this.lastUpdateCheck = response as LastUpdateCheck;
+        if (isQueuingCommands()) {
+          jumpToQueue();
+        } else {
+          this.lastUpdateCheck = response as LastUpdateCheck;
+        }
       })
       .finally(() => {
         this.isLoading = null;
@@ -207,11 +206,14 @@ export default class Updater extends Component<UpdaterAttrs> {
           method: 'POST',
           url: `${app.forum.attribute('apiUrl')}/package-manager/minor-update`,
           errorHandler,
-          config: (xhr) => handleAsyncProcessing(xhr, () => this.attrs.queueState.load()),
         })
         .then(() => {
-          app.alerts.show({ type: 'success' }, app.translator.trans('flarum-package-manager.admin.update_successful'));
-          window.location.reload();
+          if (isQueuingCommands()) {
+            jumpToQueue();
+          } else {
+            app.alerts.show({ type: 'success' }, app.translator.trans('flarum-package-manager.admin.update_successful'));
+            window.location.reload();
+          }
         })
         .finally(() => {
           this.isLoading = null;
@@ -229,14 +231,19 @@ export default class Updater extends Component<UpdaterAttrs> {
         method: 'PATCH',
         url: `${app.forum.attribute('apiUrl')}/package-manager/extensions/${extension.id}`,
         errorHandler,
-        config: (xhr) => handleAsyncProcessing(xhr, () => this.attrs.queueState.load()),
       })
       .then(() => {
-        app.alerts.show(
-          { type: 'success' },
-          app.translator.trans('flarum-package-manager.admin.extensions.successful_update', { extension: extension.extra['flarum-extension'].title })
-        );
-        window.location.reload();
+        if (isQueuingCommands()) {
+          jumpToQueue();
+        } else {
+          app.alerts.show(
+            { type: 'success' },
+            app.translator.trans('flarum-package-manager.admin.extensions.successful_update', {
+              extension: extension.extra['flarum-extension'].title,
+            })
+          );
+          window.location.reload();
+        }
       })
       .finally(() => {
         this.isLoading = null;
@@ -253,11 +260,14 @@ export default class Updater extends Component<UpdaterAttrs> {
         method: 'POST',
         url: `${app.forum.attribute('apiUrl')}/package-manager/global-update`,
         errorHandler,
-        config: (xhr) => handleAsyncProcessing(xhr, () => this.attrs.queueState.load()),
       })
       .then(() => {
-        app.alerts.show({ type: 'success' }, app.translator.trans('flarum-package-manager.admin.updater.global_update_successful'));
-        window.location.reload();
+        if (isQueuingCommands()) {
+          jumpToQueue();
+        } else {
+          app.alerts.show({ type: 'success' }, app.translator.trans('flarum-package-manager.admin.updater.global_update_successful'));
+          window.location.reload();
+        }
       })
       .finally(() => {
         this.isLoading = null;
