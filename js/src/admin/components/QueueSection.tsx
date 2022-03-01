@@ -14,6 +14,7 @@ import Label from './Label';
 import TaskOutputModal from './TaskOutputModal';
 import humanDuration from '../utils/humanDuration';
 import Task, {TaskOperations} from '../models/Task';
+import Pagination from "./Pagination";
 
 interface QueueSectionAttrs extends ComponentAttrs {
   state: QueueState;
@@ -28,25 +29,25 @@ export default class QueueSection extends Component<QueueSectionAttrs> {
   oninit(vnode: Mithril.Vnode<QueueSectionAttrs, this>) {
     super.oninit(vnode);
 
-    this.attrs.state.loadTasks().then(m.redraw);
+    this.attrs.state.load();
   }
 
   view() {
     return (
-      <div id="PackageManager-queueSection" className="ExtensionPage-permissions PackageManager-queueSection">
+      <section id="PackageManager-queueSection" className="ExtensionPage-permissions PackageManager-queueSection">
         <div className="ExtensionPage-permissions-header PackageManager-queueSection-header">
           <div className="container">
             <h2 className="ExtensionTitle">{app.translator.trans('flarum-package-manager.admin.sections.queue.title')}</h2>
             <Button
               className="Button Button--icon"
               icon="fas fa-sync-alt"
-              onclick={() => this.attrs.state.loadTasks().then(m.redraw)}
+              onclick={() => this.attrs.state.load()}
               aria-label={app.translator.trans('flarum-package-manager.admin.sections.queue.refresh')}
             />
           </div>
         </div>
         <div className="container">{this.queueTable()}</div>
-      </div>
+      </section>
     );
   }
 
@@ -122,37 +123,43 @@ export default class QueueSection extends Component<QueueSectionAttrs> {
   }
 
   queueTable() {
-    if (!this.attrs.state.tasks) {
+    const tasks = this.attrs.state.getItems();
+
+    if (!tasks) {
       return <LoadingIndicator />;
     }
 
-    if (this.attrs.state.tasks && !this.attrs.state.tasks.length) {
+    if (tasks && !tasks.length) {
       return <h3 className="ExtensionPage-subHeader">{app.translator.trans('flarum-package-manager.admin.sections.queue.none')}</h3>;
     }
 
     const columns = this.columns();
 
     return (
-      <table className="Table PackageManager-queueTable">
-        <thead>
+      <>
+        <table className="Table PackageManager-queueTable">
+          <thead>
           <tr>
             {columns.toArray().map((item, index) => (
               <th key={index}>{item.label}</th>
             ))}
           </tr>
-        </thead>
-        <tbody>{this.attrs.state.tasks.map((task, index) => (
-          <tr key={index}>
-            {columns.toArray().map((item, index) => {
-              const { label, content, ...attrs } = item;
+          </thead>
+          <tbody>{tasks.map((task, index) => (
+            <tr key={index}>
+              {columns.toArray().map((item, index) => {
+                const { label, content, ...attrs } = item;
 
-              return (
-                <td key={index} {...attrs}>{content(task)}</td>
-              );
-            })}
-          </tr>
-        ))}</tbody>
-      </table>
+                return (
+                  <td key={index} {...attrs}>{content(task)}</td>
+                );
+              })}
+            </tr>
+          ))}</tbody>
+        </table>
+
+        <Pagination list={this.attrs.state} />
+      </>
     );
   }
 

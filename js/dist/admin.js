@@ -132,6 +132,36 @@ function _createClass(Constructor, protoProps, staticProps) {
 
 /***/ }),
 
+/***/ "./node_modules/@babel/runtime/helpers/esm/extends.js":
+/*!************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/esm/extends.js ***!
+  \************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _extends; });
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js":
 /*!******************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js ***!
@@ -683,7 +713,7 @@ var Installer = /*#__PURE__*/function (_Component) {
       errorHandler: _utils_errorHandler__WEBPACK_IMPORTED_MODULE_6__["default"],
       config: function config(xhr) {
         return Object(_utils_handleAsyncProcessing__WEBPACK_IMPORTED_MODULE_7__["default"])(xhr, function () {
-          return _this2.attrs.queueState.loadTasks();
+          return _this2.attrs.queueState.load();
         });
       }
     }).then(function (response) {
@@ -906,6 +936,76 @@ var MajorUpdater = /*#__PURE__*/function (_Component) {
 
 /***/ }),
 
+/***/ "./src/admin/components/Pagination.tsx":
+/*!*********************************************!*\
+  !*** ./src/admin/components/Pagination.tsx ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Pagination; });
+/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/inheritsLoose */ "./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js");
+/* harmony import */ var flarum_admin_app__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/admin/app */ "flarum/admin/app");
+/* harmony import */ var flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_admin_app__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var flarum_common_Component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! flarum/common/Component */ "flarum/common/Component");
+/* harmony import */ var flarum_common_Component__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(flarum_common_Component__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! flarum/common/components/Button */ "flarum/common/components/Button");
+/* harmony import */ var flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+
+/**
+ * @todo make it abstract in core for reusability.
+ */
+var Pagination = /*#__PURE__*/function (_Component) {
+  Object(_babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__["default"])(Pagination, _Component);
+
+  function Pagination() {
+    return _Component.apply(this, arguments) || this;
+  }
+
+  var _proto = Pagination.prototype;
+
+  _proto.view = function view() {
+    var _this = this;
+
+    return m("nav", {
+      "class": "Pagination UserListPage-gridPagination"
+    }, m(flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_3___default.a, {
+      disabled: !this.attrs.list.hasPrev(),
+      title: flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('core.admin.users.pagination.back_button'),
+      onclick: function onclick() {
+        return _this.attrs.list.prev();
+      },
+      icon: "fas fa-chevron-left",
+      className: "Button Button--icon UserListPage-backBtn"
+    }), m("span", {
+      "class": "UserListPage-pageNumber"
+    }, flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('core.admin.users.pagination.page_counter', {
+      current: this.attrs.list.pageNumber() + 1,
+      total: this.attrs.list.getTotalPages()
+    })), m(flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_3___default.a, {
+      disabled: !this.attrs.list.hasNext(),
+      title: flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('core.admin.users.pagination.next_button'),
+      onclick: function onclick() {
+        return _this.attrs.list.next();
+      },
+      icon: "fas fa-chevron-right",
+      className: "Button Button--icon UserListPage-nextBtn"
+    }));
+  };
+
+  return Pagination;
+}(flarum_common_Component__WEBPACK_IMPORTED_MODULE_2___default.a);
+
+
+
+/***/ }),
+
 /***/ "./src/admin/components/QueueSection.tsx":
 /*!***********************************************!*\
   !*** ./src/admin/components/QueueSection.tsx ***!
@@ -937,9 +1037,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Label__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Label */ "./src/admin/components/Label.tsx");
 /* harmony import */ var _TaskOutputModal__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./TaskOutputModal */ "./src/admin/components/TaskOutputModal.tsx");
 /* harmony import */ var _utils_humanDuration__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../utils/humanDuration */ "./src/admin/utils/humanDuration.ts");
+/* harmony import */ var _Pagination__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Pagination */ "./src/admin/components/Pagination.tsx");
 
 
 var _excluded = ["label", "content"];
+
 
 
 
@@ -964,13 +1066,13 @@ var QueueSection = /*#__PURE__*/function (_Component) {
   _proto.oninit = function oninit(vnode) {
     _Component.prototype.oninit.call(this, vnode);
 
-    this.attrs.state.loadTasks().then(m.redraw);
+    this.attrs.state.load();
   };
 
   _proto.view = function view() {
     var _this = this;
 
-    return m("div", {
+    return m("section", {
       id: "PackageManager-queueSection",
       className: "ExtensionPage-permissions PackageManager-queueSection"
     }, m("div", {
@@ -983,7 +1085,7 @@ var QueueSection = /*#__PURE__*/function (_Component) {
       className: "Button Button--icon",
       icon: "fas fa-sync-alt",
       onclick: function onclick() {
-        return _this.attrs.state.loadTasks().then(m.redraw);
+        return _this.attrs.state.load();
       },
       "aria-label": flarum_admin_app__WEBPACK_IMPORTED_MODULE_2___default.a.translator.trans('flarum-package-manager.admin.sections.queue.refresh')
     }))), m("div", {
@@ -1071,24 +1173,26 @@ var QueueSection = /*#__PURE__*/function (_Component) {
   };
 
   _proto.queueTable = function queueTable() {
-    if (!this.attrs.state.tasks) {
+    var tasks = this.attrs.state.getItems();
+
+    if (!tasks) {
       return m(flarum_common_components_LoadingIndicator__WEBPACK_IMPORTED_MODULE_4___default.a, null);
     }
 
-    if (this.attrs.state.tasks && !this.attrs.state.tasks.length) {
+    if (tasks && !tasks.length) {
       return m("h3", {
         className: "ExtensionPage-subHeader"
       }, flarum_admin_app__WEBPACK_IMPORTED_MODULE_2___default.a.translator.trans('flarum-package-manager.admin.sections.queue.none'));
     }
 
     var columns = this.columns();
-    return m("table", {
+    return m('[', null, m("table", {
       className: "Table PackageManager-queueTable"
     }, m("thead", null, m("tr", null, columns.toArray().map(function (item, index) {
       return m("th", {
         key: index
       }, item.label);
-    }))), m("tbody", null, this.attrs.state.tasks.map(function (task, index) {
+    }))), m("tbody", null, tasks.map(function (task, index) {
       return m("tr", {
         key: index
       }, columns.toArray().map(function (item, index) {
@@ -1100,7 +1204,9 @@ var QueueSection = /*#__PURE__*/function (_Component) {
           key: index
         }, attrs), content(task));
       }));
-    })));
+    }))), m(_Pagination__WEBPACK_IMPORTED_MODULE_13__["default"], {
+      list: this.attrs.state
+    }));
   };
 
   _proto.operationIcon = function operationIcon(operation) {
@@ -1429,7 +1535,7 @@ var Updater = /*#__PURE__*/function (_Component) {
       errorHandler: _utils_errorHandler__WEBPACK_IMPORTED_MODULE_7__["default"],
       config: function config(xhr) {
         return Object(_utils_handleAsyncProcessing__WEBPACK_IMPORTED_MODULE_12__["default"])(xhr, function () {
-          return _this4.attrs.queueState.loadTasks();
+          return _this4.attrs.queueState.load();
         });
       }
     }).then(function (response) {
@@ -1454,7 +1560,7 @@ var Updater = /*#__PURE__*/function (_Component) {
         errorHandler: _utils_errorHandler__WEBPACK_IMPORTED_MODULE_7__["default"],
         config: function config(xhr) {
           return Object(_utils_handleAsyncProcessing__WEBPACK_IMPORTED_MODULE_12__["default"])(xhr, function () {
-            return _this5.attrs.queueState.loadTasks();
+            return _this5.attrs.queueState.load();
           });
         }
       }).then(function () {
@@ -1480,7 +1586,7 @@ var Updater = /*#__PURE__*/function (_Component) {
       errorHandler: _utils_errorHandler__WEBPACK_IMPORTED_MODULE_7__["default"],
       config: function config(xhr) {
         return Object(_utils_handleAsyncProcessing__WEBPACK_IMPORTED_MODULE_12__["default"])(xhr, function () {
-          return _this6.attrs.queueState.loadTasks();
+          return _this6.attrs.queueState.load();
         });
       }
     }).then(function () {
@@ -1507,7 +1613,7 @@ var Updater = /*#__PURE__*/function (_Component) {
       errorHandler: _utils_errorHandler__WEBPACK_IMPORTED_MODULE_7__["default"],
       config: function config(xhr) {
         return Object(_utils_handleAsyncProcessing__WEBPACK_IMPORTED_MODULE_12__["default"])(xhr, function () {
-          return _this7.attrs.queueState.loadTasks();
+          return _this7.attrs.queueState.load();
         });
       }
     }).then(function () {
@@ -1775,24 +1881,75 @@ var Task = /*#__PURE__*/function (_Model) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return QueueState; });
-/* harmony import */ var flarum_admin_app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! flarum/admin/app */ "flarum/admin/app");
-/* harmony import */ var flarum_admin_app__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(flarum_admin_app__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var flarum_admin_app__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/admin/app */ "flarum/admin/app");
+/* harmony import */ var flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_admin_app__WEBPACK_IMPORTED_MODULE_1__);
+
 
 
 var QueueState = /*#__PURE__*/function () {
   function QueueState() {
-    this.tasks = void 0;
+    this.tasks = null;
+    this.limit = 5;
+    this.offset = 0;
+    this.total = 0;
   }
 
   var _proto = QueueState.prototype;
 
-  _proto.loadTasks = function loadTasks() {
-    var _this = this;
+  _proto.load = function load(params) {
+    var _params,
+        _this = this;
 
     this.tasks = null;
-    return flarum_admin_app__WEBPACK_IMPORTED_MODULE_0___default.a.store.find('package-manager-tasks', {}).then(function (data) {
+    params = Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
+      page: Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
+        limit: this.limit,
+        offset: this.offset
+      }, (_params = params) == null ? void 0 : _params.page)
+    }, params);
+    return flarum_admin_app__WEBPACK_IMPORTED_MODULE_1___default.a.store.find('package-manager-tasks', params || {}).then(function (data) {
+      var _data$payload$meta;
+
       _this.tasks = data;
+      _this.total = (_data$payload$meta = data.payload.meta) == null ? void 0 : _data$payload$meta.total;
+      m.redraw();
+      return data;
     });
+  };
+
+  _proto.getItems = function getItems() {
+    return this.tasks;
+  };
+
+  _proto.getTotalPages = function getTotalPages() {
+    return Math.ceil(this.total / this.limit);
+  };
+
+  _proto.pageNumber = function pageNumber() {
+    return Math.ceil(this.offset / this.limit);
+  };
+
+  _proto.hasPrev = function hasPrev() {
+    return this.pageNumber() !== 0;
+  };
+
+  _proto.hasNext = function hasNext() {
+    return this.offset + this.limit < this.total;
+  };
+
+  _proto.prev = function prev() {
+    if (this.hasPrev()) {
+      this.offset -= this.limit;
+      this.load();
+    }
+  };
+
+  _proto.next = function next() {
+    if (this.hasNext()) {
+      this.offset += this.limit;
+      this.load();
+    }
   };
 
   return QueueState;
@@ -1875,7 +2032,7 @@ function handleAsyncProcessing(xhr, refresh) {
     if (this.status === 202) {
       var _document$getElementB;
 
-      refresh().then(m.redraw);
+      refresh();
       (_document$getElementB = document.getElementById('PackageManager-queueSection')) == null ? void 0 : _document$getElementB.scrollIntoView({
         block: 'nearest'
       });

@@ -45,11 +45,9 @@ flarum-package-manager:
         columns:
           details: Details
           elapsed_time: Completed in
-          finished_at: Finish Time
           operation: Operation
           package: Package
           status: Status
-          started_at: Start Time
         none: There are no tasks yet.
         operations:
           extension_install: Install extension

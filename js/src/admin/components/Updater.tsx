@@ -184,7 +184,7 @@ export default class Updater extends Component<UpdaterAttrs> {
         method: 'POST',
         url: `${app.forum.attribute('apiUrl')}/package-manager/check-for-updates`,
         errorHandler,
-        config: (xhr) => handleAsyncProcessing(xhr, () => this.attrs.queueState.loadTasks()),
+        config: (xhr) => handleAsyncProcessing(xhr, () => this.attrs.queueState.load()),
       })
       .then((response) => {
         // @TODO, I wish the response had more than just the payload, need status code here to determine
@@ -207,7 +207,7 @@ export default class Updater extends Component<UpdaterAttrs> {
           method: 'POST',
           url: `${app.forum.attribute('apiUrl')}/package-manager/minor-update`,
           errorHandler,
-          config: (xhr) => handleAsyncProcessing(xhr, () => this.attrs.queueState.loadTasks()),
+          config: (xhr) => handleAsyncProcessing(xhr, () => this.attrs.queueState.load()),
         })
         .then(() => {
           app.alerts.show({ type: 'success' }, app.translator.trans('flarum-package-manager.admin.update_successful'));
@@ -229,7 +229,7 @@ export default class Updater extends Component<UpdaterAttrs> {
         method: 'PATCH',
         url: `${app.forum.attribute('apiUrl')}/package-manager/extensions/${extension.id}`,
         errorHandler,
-        config: (xhr) => handleAsyncProcessing(xhr, () => this.attrs.queueState.loadTasks()),
+        config: (xhr) => handleAsyncProcessing(xhr, () => this.attrs.queueState.load()),
       })
       .then(() => {
         app.alerts.show(
@@ -253,7 +253,7 @@ export default class Updater extends Component<UpdaterAttrs> {
         method: 'POST',
         url: `${app.forum.attribute('apiUrl')}/package-manager/global-update`,
         errorHandler,
-        config: (xhr) => handleAsyncProcessing(xhr, () => this.attrs.queueState.loadTasks()),
+        config: (xhr) => handleAsyncProcessing(xhr, () => this.attrs.queueState.load()),
       })
       .then(() => {
         app.alerts.show({ type: 'success' }, app.translator.trans('flarum-package-manager.admin.updater.global_update_successful'));

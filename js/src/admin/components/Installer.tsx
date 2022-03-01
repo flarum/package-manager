@@ -60,7 +60,7 @@ export default class Installer extends Component<InstallerAttrs> {
           data: this.data(),
         },
         errorHandler,
-        config: (xhr) => handleAsyncProcessing(xhr, () => this.attrs.queueState.loadTasks()),
+        config: (xhr) => handleAsyncProcessing(xhr, () => this.attrs.queueState.load()),
       })
       .then((response) => {
         const extensionId = response.id;

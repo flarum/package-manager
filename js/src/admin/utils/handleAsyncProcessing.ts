@@ -7,7 +7,7 @@ export default function handleAsyncProcessing(xhr: XMLHttpRequest, refresh: () =
    */
   xhr.onloadend = function () {
     if (this.status === 202) {
-      refresh().then(m.redraw);
+      refresh();
       document.getElementById('PackageManager-queueSection')?.scrollIntoView({ block: 'nearest' });
       app.modal.close();
     }
