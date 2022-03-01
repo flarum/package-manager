@@ -67,6 +67,7 @@ flarum-package-manager:
           failure: Failed
           pending: Pending
           running: Running
+        task_just_started: Task just started
         title: Queue
 
     settings:

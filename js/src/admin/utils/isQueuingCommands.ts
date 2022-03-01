@@ -7,5 +7,5 @@ import app from 'flarum/admin/app';
  * we'll stick to just checking settings, assuming *all* commands are queued or none.
  */
 export default function isQueuingCommands(): boolean {
-  return Boolean(app.data.settings['flarum-package-manager.queue_jobs']) && Boolean(app.data['flarum-package-manager.using_sync_queue']);
+  return Boolean(app.data.settings['flarum-package-manager.queue_jobs']) && !Boolean(app.data['flarum-package-manager.using_sync_queue']);
 }

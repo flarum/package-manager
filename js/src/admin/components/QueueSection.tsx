@@ -110,7 +110,7 @@ export default class QueueSection extends Component<{}> {
       'elapsedTime',
       {
         label: extractText(app.translator.trans('flarum-package-manager.admin.sections.queue.columns.elapsed_time')),
-        content: (task) => (
+        content: (task) => !task.startedAt() ? app.translator.trans('flarum-package-manager.admin.sections.queue.task_just_started') : (
           <Tooltip text={`${dayjs(task.startedAt()).format('LL LTS')}  ${dayjs(task.finishedAt()).format('LL LTS')}`}>
             <span>{humanDuration(task.startedAt(), task.finishedAt())}</span>
           </Tooltip>

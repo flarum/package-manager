@@ -1141,7 +1141,7 @@ var QueueSection = /*#__PURE__*/function (_Component) {
     items.add('elapsedTime', {
       label: flarum_common_utils_extractText__WEBPACK_IMPORTED_MODULE_9___default()(flarum_admin_app__WEBPACK_IMPORTED_MODULE_2___default.a.translator.trans('flarum-package-manager.admin.sections.queue.columns.elapsed_time')),
       content: function content(task) {
-        return m(flarum_common_components_Tooltip__WEBPACK_IMPORTED_MODULE_6___default.a, {
+        return !task.startedAt() ? flarum_admin_app__WEBPACK_IMPORTED_MODULE_2___default.a.translator.trans('flarum-package-manager.admin.sections.queue.task_just_started') : m(flarum_common_components_Tooltip__WEBPACK_IMPORTED_MODULE_6___default.a, {
           text: dayjs(task.startedAt()).format('LL LTS') + "  " + dayjs(task.finishedAt()).format('LL LTS')
         }, m("span", null, Object(_utils_humanDuration__WEBPACK_IMPORTED_MODULE_12__["default"])(task.startedAt(), task.finishedAt())));
       }
@@ -2040,7 +2040,7 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 function isQueuingCommands() {
-  return Boolean(flarum_admin_app__WEBPACK_IMPORTED_MODULE_0___default.a.data.settings['flarum-package-manager.queue_jobs']) && Boolean(flarum_admin_app__WEBPACK_IMPORTED_MODULE_0___default.a.data['flarum-package-manager.using_sync_queue']);
+  return Boolean(flarum_admin_app__WEBPACK_IMPORTED_MODULE_0___default.a.data.settings['flarum-package-manager.queue_jobs']) && !Boolean(flarum_admin_app__WEBPACK_IMPORTED_MODULE_0___default.a.data['flarum-package-manager.using_sync_queue']);
 }
 
 /***/ }),
